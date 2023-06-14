@@ -1,0 +1,87 @@
+upstream app_process {
+    server {{ host }}:{{ port|int }};
+}
+
+server {
+    # Security - http://nginx.org/en/docs/http/request_processing.html
+    listen {{ http_internal_port|int }};
+    return 444;
+}
+
+{% if with_ssl and redirect_ssl %}
+server {
+    listen {{ http_internal_port|int }};
+    listen [::]:{{ http_internal_port|int }};
+    server_name {{ domains|join(' ') }};
+    rewrite ^ https://$http_host$request_uri? permanent;
+}
+{% endif %}
+
+server {
+    {% if with_ssl %}
+    listen {{ https_internal_port|int }} {{ with_http2|ifelse('ssl http2', '') }};
+    listen [::]:{{ https_internal_port|int }} {{ with_http2|ifelse('ssl http2', '') }};
+    {% include 'inc/site.ssl.conf.j2' %}
+    {% else %}
+    listen {{ http_internal_port|int }};
+    {% endif %}
+
+    {% include 'inc/site.security-headers.conf.j2' %}
+
+    server_name {{ domains|join(' ') }};
+
+    gzip on;
+    gzip_proxied any;
+    gzip_types application/javascript application/json text/css text/javascript text/xml;
+
+    client_max_body_size 0;
+
+    # Logging --------------------------------------------------------------------------------------
+
+    access_log /var/log/nginx/{{ name }}/access.log combined if=$condition;
+    error_log  /var/log/nginx/{{ name }}/error.log  {{ error_log_level }};
+
+    # Locations ------------------------------------------------------------------------------------
+
+    location /robots.txt {
+        alias {{ static_directory }}/diet/robots.txt;
+    }
+
+    location /favicon/ {
+        alias {{ static_directory }}/diet/favicons/active/;
+    }
+
+    location /static/ {
+        access_log off;
+        autoindex  on;
+        {% if not debug %}
+        expires    max;
+        {% endif %}
+        sendfile   off;  # Avoid Nginx serving outdated static files
+
+        alias {{ static_directory }}/;
+    }
+
+    location /media/ {
+        access_log off;
+        autoindex  on;
+        sendfile   off;  # Avoid Nginx serving outdated static files
+
+        alias {{ media_directory }}/;
+    }
+
+    location / {
+        # Security - http://breachattack.com/resources/BREACH%20-%20SSL,%20gone%20in%2030%20seconds.pdf
+        # length_hiding on;
+        # length_hiding_max 512;
+
+        client_max_body_size {{ max_body_size }};
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect   off;
+        proxy_buffering  off;
+        proxy_pass       http://app_process;
+    }
+}
