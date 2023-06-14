@@ -40,7 +40,7 @@ module "reverse_proxy" {
   sites = {
     app = {
       name    = var.identifier
-      path    = "sites/app.conf.j2"
+      path    = "${path.module}/sites/app.conf.j2"
       host    = module.app.host
       port    = module.app.port
       domains = var.domains
