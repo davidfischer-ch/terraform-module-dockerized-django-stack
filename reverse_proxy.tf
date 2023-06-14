@@ -39,11 +39,12 @@ module "reverse_proxy" {
 
   sites = {
     app = {
-      name    = var.identifier
-      path    = "${path.module}/sites/app.conf.j2"
-      host    = module.app.host
-      port    = module.app.port
-      domains = var.domains
+      name     = var.identifier
+      path     = "${path.module}/sites/app.conf.j2"
+      inc_path = module.templates.inc_path
+      host     = module.app.host
+      port     = module.app.port
+      domains  = var.domains
 
       redirect_ssl = true
       with_dhparam = true

@@ -21,12 +21,12 @@ server {
     {% if with_ssl %}
     listen {{ https_internal_port|int }} {{ with_http2|ifelse('ssl http2', '') }};
     listen [::]:{{ https_internal_port|int }} {{ with_http2|ifelse('ssl http2', '') }};
-    {% include 'inc/site.ssl.conf.j2' %}
+    {% include inc_path ~ 'site.ssl.conf.j2' %}
     {% else %}
     listen {{ http_internal_port|int }};
     {% endif %}
 
-    {% include 'inc/site.security-headers.conf.j2' %}
+    {% include inc_path ~ 'site.security-headers.conf.j2' %}
 
     server_name {{ domains|join(' ') }};
 
