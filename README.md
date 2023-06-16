@@ -28,6 +28,7 @@ module "diet" {
   # Django Application
 
   project_name                    = "DietApp"
+  site_name                       = "Diet Application"
   settings                        = {}
   admin_url                       = "A2br2wZDmTHlCjQq"
   compress_enabled                = false

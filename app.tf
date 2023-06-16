@@ -17,6 +17,7 @@ module "app" {
   # Django Application
 
   project_name = var.project_name
+  site_name    = var.site_name
   settings     = var.settings
 
   admin_url = var.admin_url

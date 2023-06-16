@@ -42,6 +42,10 @@ variable "project_name" {
   description = "Django project's name (directory), for example DietApp."
 }
 
+variable "site_name" {
+  type = string
+}
+
 variable "settings" {
   type        = map(string)
   default     = {}
