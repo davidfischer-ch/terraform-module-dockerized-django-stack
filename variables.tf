@@ -52,6 +52,14 @@ variable "settings" {
   description = "Any additional environment variables for the application (e.g. { FOO = \"bar\" })"
 }
 
+variable "admin_name" {
+  type = string
+}
+
+variable "admin_email" {
+  type = string
+}
+
 variable "admin_url" {
   type    = string
   default = "admin"

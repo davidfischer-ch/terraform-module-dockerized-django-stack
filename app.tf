@@ -20,7 +20,9 @@ module "app" {
   site_name    = var.site_name
   settings     = var.settings
 
-  admin_url = var.admin_url
+  admin_name  = var.admin_name
+  admin_email = var.admin_email
+  admin_url   = var.admin_url
 
   compress_enabled = var.compress_enabled
   compress_offline = var.compress_offline
