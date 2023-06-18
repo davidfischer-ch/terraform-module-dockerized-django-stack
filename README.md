@@ -7,12 +7,12 @@ Manage a "standardized" Django application's stack.
 Example for an application called `diet` :
 
 ```
-module "diet" {
+module "diet_dev" {
   source = "git::ssh://git@gitlab.fisch3r.net:10022/family/infrastructure/modules/terraform-module-dockerized-django-stack.git?ref=main"
 
-  identifier     = "diet"
+  identifier     = "diet-dev"
   enabled        = true
-  data_directory = "/data/diet"
+  data_directory = "/data/diet-dev"
 
   # Networking
 
@@ -28,22 +28,25 @@ module "diet" {
   # Django Application
 
   project_name                    = "DietApp"
+  project_app                     = "diet"
   site_name                       = "Diet Application"
   settings                        = {}
+  admin_name                      = "David Fischer"
+  admin_email                     = "david@fisch3r.net"
   admin_url                       = "A2br2wZDmTHlCjQq"
   compress_enabled                = false
   compress_offline                = false
-  csrf_trusted_origins            = ["https://diet.com"]
+  csrf_trusted_origins            = ["https://diet-dev.fisch3r.net"]
   debug                           = true
   debug_toolbar                   = true
   debug_toolbar_template_profiler = true
-  default_from_email              = "admin@diet.com"
-  domains                         = ["diet.com"]
+  default_from_email              = "david@fisch3r.net"
+  domains                         = ["diet-dev.fisch3r.net"]
   email_backend                   = "django.core.mail.backends.dummy.EmailBackend"
-  email_subject_prefix            = "[Diet Application] "
+  email_subject_prefix            = "[Diet Application | DEV] "
   managers                        = []
 
-  app_image_name = "your-registry.io/diet:1.2.3"
+  app_image_name = "your-registry.io/diet:3.0.2-1"
 
   nginx_image_name      = "nginx:1.25.1"  # https://hub.docker.com/_/nginx/tags
   postgresql_image_name = "postgres:15.3" # https://hub.docker.com/_/postgres/tags

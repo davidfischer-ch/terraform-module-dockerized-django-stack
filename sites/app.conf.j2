@@ -44,11 +44,11 @@ server {
     # Locations ------------------------------------------------------------------------------------
 
     location /robots.txt {
-        alias {{ static_directory }}/diet/robots.txt;
+        alias {{ static_directory }}/{{ project_app }}/robots.txt;
     }
 
     location /favicon/ {
-        alias {{ static_directory }}/diet/favicons/active/;
+        alias {{ static_directory }}/{{ project_app }}/favicons/active/;
     }
 
     location /static/ {

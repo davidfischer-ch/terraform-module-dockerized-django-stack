@@ -42,6 +42,11 @@ variable "project_name" {
   description = "Django project's name (directory), for example DietApp."
 }
 
+variable "project_app" {
+  type        = string
+  description = "Django project's main application (containing robots.txt and favicons in static)."
+}
+
 variable "site_name" {
   type = string
 }

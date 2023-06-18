@@ -53,6 +53,8 @@ module "reverse_proxy" {
       ssl_crt      = var.ssl_crt
       ssl_key      = var.ssl_key
 
+      project_app = var.project_app
+
       media_directory  = "/data/media"
       static_directory = "/data/static"
 
