@@ -70,6 +70,12 @@ server {
         alias {{ media_directory }}/;
     }
 
+    location /protected/ {
+        internal;
+
+        alias {{ protected_directory }}/;
+    }
+
     location / {
         # Security - http://breachattack.com/resources/BREACH%20-%20SSL,%20gone%20in%2030%20seconds.pdf
         # length_hiding on;

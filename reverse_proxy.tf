@@ -29,6 +29,11 @@ module "reverse_proxy" {
       read_only      = true
     },
     {
+      container_path = "/data/protected"
+      host_path      = module.app.protected_directory
+      read_only      = true
+    },
+    {
       container_path = "/data/static"
       host_path      = module.app.static_directory
       read_only      = true
@@ -55,8 +60,9 @@ module "reverse_proxy" {
 
       project_app = var.project_app
 
-      media_directory  = "/data/media"
-      static_directory = "/data/static"
+      media_directory     = "/data/media"
+      protected_directory = "/data/protected"
+      static_directory    = "/data/static"
 
       max_body_size = var.max_body_size
       debug         = var.debug
