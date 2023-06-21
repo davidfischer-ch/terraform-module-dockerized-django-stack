@@ -176,6 +176,18 @@ variable "redis_image_name" {
   default = "redis:latest"
 }
 
+# Reverse Proxy Container
+
+variable "nginx_log_level" {
+  type    = string
+  default = "warn"
+}
+
+variable "nginx_modules" {
+  type    = list(string)
+  default = []
+}
+
 # Web Container
 
 variable "web" {

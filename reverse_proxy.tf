@@ -12,7 +12,11 @@ module "reverse_proxy" {
 
   # Logging
 
-  error_log_level = "warn"
+  error_log_level = var.nginx_log_level
+
+  # Miscellaneous
+
+  modules = var.nginx_modules
 
   # Networking
 
