@@ -176,6 +176,13 @@ variable "redis_image_name" {
   default = "redis:latest"
 }
 
+# Database Container
+
+variable "postgresql_max_connections" {
+  type    = number
+  default = 100
+}
+
 # Reverse Proxy Container
 
 variable "nginx_log_level" {

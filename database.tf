@@ -20,4 +20,6 @@ module "database" {
   name     = var.identifier
   user     = var.identifier
   password = random_password.database.result
+
+  max_connections = var.postgresql_max_connections
 }
