@@ -1,5 +1,6 @@
 resource "docker_image" "nginx" {
-  name = var.nginx_image_name
+  name         = var.nginx_image_name
+  keep_locally = true # Prevent conflicts if other modules are using the image we are destroying
 }
 
 module "reverse_proxy" {

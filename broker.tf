@@ -1,5 +1,6 @@
 resource "docker_image" "redis" {
-  name = var.redis_image_name
+  name         = var.redis_image_name
+  keep_locally = true # Prevent conflicts if other modules are using the image we are destroying
 }
 
 resource "random_password" "broker" {
