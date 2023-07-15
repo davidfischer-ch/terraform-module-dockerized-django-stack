@@ -1,23 +1,32 @@
 variable "identifier" {
-  type = string
+  type        = string
+  description = "Identifier (must be unique, used to name resources)."
+  validation {
+    condition     = regex("^[a-z]+(-[a-z0-9]+)*$", var.identifier) != null
+    error_message = "Argument `identifier` must match regex ^[a-z]+(-[a-z0-9]+)*$."
+  }
 }
 
 variable "enabled" {
-  type = bool
+  type        = bool
+  description = "Toggle the containers (started or stopped)."
 }
 
 variable "data_directory" {
-  type = string
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Networking
 
 variable "https_port" {
-  type = number
+  type        = number
+  description = "Bind the reverse proxy's HTTPS port."
 }
 
 variable "http_port" {
-  type = number
+  type        = number
+  description = "Bind the reverse proxy's HTTP port."
 }
 
 # Reverse Proxy
@@ -48,7 +57,8 @@ variable "project_app" {
 }
 
 variable "site_name" {
-  type = string
+  type        = string
+  description = "Django site's name, for example \"Diet Application\"."
 }
 
 variable "settings" {
