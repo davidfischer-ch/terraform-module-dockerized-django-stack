@@ -2,6 +2,8 @@
 
 Manage a "standardized" Django application's stack.
 
+[TOC]
+
 ## Example
 
 Example for an application called `diet` :
@@ -92,3 +94,23 @@ sudo docker exec -it diet-web python manage.py migrate
 ### Backup and restore database
 
 See [PostgreSQL Terraform Module (Dockerized)](https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-postgresql).
+
+### Backup media assets
+
+Note: Based on example configuration.
+
+```
+BACKUP_PATH=/my/backup/diet-dev/
+rsync -ah -lH --delete --progress /data/diet-dev/app/media/ "$BACKUP_PATH/media/"
+rsync -ah -lH --delete --progress /data/diet-dev/app/protected/ "$BACKUP_PATH/protected/"
+```
+
+### Restore media assets
+
+Note: Based on example configuration.
+
+```
+BACKUP_PATH=/my/backup/diet-dev/
+rsync -ah -lH --delete --progress "$BACKUP_PATH/media/" /data/diet-dev/app/media/
+rsync -ah -lH --delete --progress "$BACKUP_PATH/protected/" /data/diet-dev/app/protected/
+```
