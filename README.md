@@ -97,8 +97,6 @@ See [PostgreSQL Terraform Module (Dockerized)](https://gitlab.fisch3r.net/family
 
 ### Backup media assets
 
-Note: Based on example configuration.
-
 ```
 BACKUP_PATH=/my/backup/diet-dev/
 rsync -ah -lH --delete --progress /data/diet-dev/app/media/ "$BACKUP_PATH/media/"
@@ -106,8 +104,6 @@ rsync -ah -lH --delete --progress /data/diet-dev/app/protected/ "$BACKUP_PATH/pr
 ```
 
 ### Restore media assets
-
-Note: Based on example configuration.
 
 ```
 BACKUP_PATH=/my/backup/diet-dev/
