@@ -89,10 +89,6 @@ Files will be generated under `/data/diet/app/static/` directory.
 sudo docker exec -it diet-web python manage.py migrate
 ```
 
-### Restore DB from a dump
+### Backup and restore database
 
-```
-sudo docker cp db.sql diet-database:/var/lib/postgresql/data/db.sql
-sudo docker exec -it diet-database /bin/bash
-root@diet-database:# psql -U diet -d diet < /var/lib/postgresql/data/db.sql
-```
+See [PostgreSQL Terraform Module (Dockerized)](https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-postgresql).
