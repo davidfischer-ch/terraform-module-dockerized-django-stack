@@ -11,13 +11,13 @@ terraform {
     jinja = {
       # https://github.com/NikolaLohinski/terraform-provider-jinja/tags
       source  = "NikolaLohinski/jinja"
-      version = ">= 1.15.0"
+      version = ">= 1.17.0"
     }
 
     local = {
       # https://github.com/hashicorp/terraform-provider-local/tags
       source  = "hashicorp/local"
-      version = ">= 2.4.0"
+      version = ">= 2.4.1"
     }
 
     null = {
@@ -30,7 +30,7 @@ terraform {
     random = {
       # https://github.com/hashicorp/terraform-provider-random/tags
       source  = "hashicorp/random"
-      version = ">= 3.5.1"
+      version = ">= 3.6.0"
     }
   }
 }
