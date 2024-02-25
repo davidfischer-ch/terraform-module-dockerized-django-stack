@@ -17,12 +17,6 @@ variable "data_directory" {
   description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
-variable "venv_directory" {
-  type        = string
-  default     = "/home/app/venv"
-  description = "Where the Python virtual environment is setup (inside the container)."
-}
-
 # Networking
 
 variable "https_port" {
