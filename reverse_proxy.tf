@@ -21,6 +21,7 @@ module "reverse_proxy" {
 
   # Networking
 
+  hosts      = var.hosts
   network_id = docker_network.app.id
   https_port = var.https_port
   http_port  = var.http_port

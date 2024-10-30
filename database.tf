@@ -16,6 +16,7 @@ module "database" {
   image_id       = docker_image.postgresql.image_id
   data_directory = "${var.data_directory}/database"
 
+  hosts      = var.hosts
   network_id = docker_network.app.id
 
   name     = var.identifier

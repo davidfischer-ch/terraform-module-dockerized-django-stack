@@ -17,7 +17,13 @@ variable "data_directory" {
   description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
-# Networking
+# Networking ---------------------------------------------------------------------------------------
+
+variable "hosts" {
+  type        = map(string)
+  default     = {}
+  description = "Add entries to container hosts file."
+}
 
 variable "https_port" {
   type        = number
@@ -29,7 +35,7 @@ variable "http_port" {
   description = "Bind the reverse proxy's HTTP port."
 }
 
-# Reverse Proxy
+# Reverse Proxy ------------------------------------------------------------------------------------
 
 variable "ssl_crt" {
   type = string
@@ -44,7 +50,7 @@ variable "max_body_size" {
   default = "20M"
 }
 
-# Django Application
+# Django Application -------------------------------------------------------------------------------
 
 variable "project_name" {
   type        = string
@@ -164,7 +170,7 @@ variable "managers" {
   default = []
 }
 
-# Images
+# Images -------------------------------------------------------------------------------------------
 
 variable "app_image_name" {
   type        = string
@@ -186,14 +192,14 @@ variable "redis_image_name" {
   default = "redis:latest"
 }
 
-# Database Container
+# Database Container -------------------------------------------------------------------------------
 
 variable "postgresql_max_connections" {
   type    = number
   default = 100
 }
 
-# Reverse Proxy Container
+# Reverse Proxy Container --------------------------------------------------------------------------
 
 variable "nginx_log_level" {
   type    = string
@@ -205,13 +211,13 @@ variable "nginx_modules" {
   default = []
 }
 
-# Web Container
+# Web Container ------------------------------------------------------------------------------------
 
 variable "web" {
   description = "Application's settings."
 }
 
-# Workers Containers
+# Workers Containers -------------------------------------------------------------------------------
 
 variable "beat" {
   description = "Celery beat settings."

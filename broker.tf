@@ -16,6 +16,7 @@ module "broker" {
   image_id       = docker_image.redis.image_id
   data_directory = "${var.data_directory}/broker"
 
+  hosts      = var.hosts
   network_id = docker_network.app.id
 
   databases = 2

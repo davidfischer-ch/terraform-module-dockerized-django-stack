@@ -13,6 +13,7 @@ module "app" {
 
   # Networking
 
+  hosts      = var.hosts
   network_id = docker_network.app.id
 
   # Django Application
