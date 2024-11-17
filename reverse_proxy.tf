@@ -4,7 +4,7 @@ resource "docker_image" "nginx" {
 }
 
 module "reverse_proxy" {
-  source = "git::ssh://git@gitlab.fisch3r.net:10022/family/infrastructure/modules/terraform-module-dockerized-nginx.git?ref=main"
+  source = "git::https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-nginx.git?ref=main"
 
   identifier     = "${var.identifier}-reverse-proxy"
   enabled        = var.enabled
