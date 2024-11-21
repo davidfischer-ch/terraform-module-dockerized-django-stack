@@ -10,6 +10,7 @@ module "app" {
   enabled        = var.enabled
   image_id       = docker_image.app.image_id
   data_directory = "${var.data_directory}/app"
+  data_owner     = var.data_owner
 
   # Networking
 

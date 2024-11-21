@@ -12,9 +12,17 @@ variable "enabled" {
   description = "Toggle the containers (started or stopped)."
 }
 
+# Storage ------------------------------------------------------------------------------------------
+
 variable "data_directory" {
   type        = string
   description = "Where data will be persisted (volumes will be mounted as sub-directories)."
+}
+
+variable "data_owner" {
+  type        = string
+  default     = "1001:1001"
+  description = "Used to set the ownership of application's data directories."
 }
 
 # Networking ---------------------------------------------------------------------------------------
