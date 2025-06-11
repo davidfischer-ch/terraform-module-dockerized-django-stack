@@ -9,7 +9,7 @@ resource "random_password" "database" {
 }
 
 module "database" {
-  source = "git::https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-postgresql.git?ref=1.0.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql.git?ref=1.0.0"
 
   identifier     = "${var.identifier}-database"
   enabled        = var.enabled

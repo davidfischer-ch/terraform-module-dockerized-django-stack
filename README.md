@@ -93,7 +93,7 @@ sudo docker exec -it diet-web python manage.py migrate
 
 ### Backup and restore database
 
-See [PostgreSQL Terraform Module (Dockerized)](https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-postgresql).
+See [PostgreSQL Terraform Module (Dockerized)](https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql).
 
 ### Backup media assets
 

@@ -9,7 +9,7 @@ resource "random_password" "broker" {
 }
 
 module "broker" {
-  source = "git::https://gitlab.fisch3r.net/family/infrastructure/modules/terraform-module-dockerized-redis.git?ref=1.0.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-redis.git?ref=1.0.0"
 
   identifier     = "${var.identifier}-broker"
   enabled        = var.enabled
