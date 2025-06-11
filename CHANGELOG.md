@@ -1,5 +1,15 @@
 # Changelog
 
+## Release v1.0.2 (2025-06-11)
+
+### Features
+
+* Add variable `dhparam_use_dsa` (default to `false`)
+
+### Fix and enhancements
+
+* Upgrade `nginx` module version 1.0.2
+
 ## Release v1.0.1 (2025-06-11)
 
 ### Fix and enhancements
