@@ -10,7 +10,7 @@ Example for an application called `diet` :
 
 ```
 module "diet_dev" {
-  source = "git::ssh://git@gitlab.fisch3r.net:10022/family/infrastructure/modules/terraform-module-dockerized-django-stack.git?ref=main"
+  source = "git+https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=main"
 
   identifier     = "diet-dev"
   enabled        = true
