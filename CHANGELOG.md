@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v1.0.3 (2025-08-23)
+
+### Fix and enhancements
+
+* Upgrade `django-app` module version to 1.0.1
+* Upgrade `postgresql` module version to 1.0.1
+* Upgrade `redis` module version to 1.0.1
+
 ## Release v1.0.2 (2025-06-11)
 
 ### Features
