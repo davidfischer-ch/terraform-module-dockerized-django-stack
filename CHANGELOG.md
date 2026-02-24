@@ -1,5 +1,11 @@
 # Changelog
 
+## Release v1.0.4 (2026-02-24)
+
+### Features
+
+* Add `with_spa` option
+
 ## Release v1.0.3 (2025-08-23)
 
 ### Fix and enhancements
