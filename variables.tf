@@ -230,6 +230,12 @@ variable "nginx_modules" {
   default = []
 }
 
+variable "with_spa" {
+  type        = bool
+  default     = false
+  description = "Serve a bundled React SPA from Nginx (try_files fallback to index.html)."
+}
+
 # Web Container ------------------------------------------------------------------------------------
 
 variable "web" {

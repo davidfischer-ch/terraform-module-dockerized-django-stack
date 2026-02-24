@@ -76,6 +76,35 @@ server {
         alias {{ protected_directory }}/;
     }
 
+    {% if with_spa %}
+    # ── Django backend paths ───────────────────────────────────────────────────
+    location ~ ^/(api|account|admin|i18n|avatar|en|fr)(/|$) {
+        client_max_body_size {{ max_body_size }};
+
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect   off;
+        proxy_buffering  off;
+        proxy_pass       http://app_process;
+    }
+
+    # ── Vite hashed assets — immutable cache (content-hashed filenames) ────────
+    location /assets/ {
+        root       {{ static_directory }}/frontend;
+        access_log off;
+        expires    max;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # ── React SPA — serve index.html for all React Router paths ───────────────
+    location / {
+        root      {{ static_directory }}/frontend;
+        try_files $uri $uri/ /index.html;
+        expires   -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+    {% else %}
     location / {
         # Security - http://breachattack.com/resources/BREACH%20-%20SSL,%20gone%20in%2030%20seconds.pdf
         # length_hiding on;
@@ -90,4 +119,5 @@ server {
         proxy_buffering  off;
         proxy_pass       http://app_process;
     }
+    {% endif %}
 }

@@ -76,6 +76,7 @@ module "reverse_proxy" {
 
       max_body_size = var.max_body_size
       debug         = var.debug
+      with_spa      = var.with_spa
     }
   }
 }
