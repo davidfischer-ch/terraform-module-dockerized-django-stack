@@ -8,7 +8,7 @@ Manage a "standardized" Django application's stack.
 
 See [examples/default](examples/default) for a complete working configuration.
 
-Example for an application called `diet` :
+Example for an application called `myapp` :
 
 ```hcl
 provider "acme" {
@@ -102,20 +102,20 @@ module "myapp_dev" {
 
 ## Actions
 
-Examples are based on the following configuration (application called `diet`) :
+Examples are based on the following configuration (application called `myapp`) :
 
 ### Generate static files
 
 ```
-sudo docker exec -it diet-web python manage.py collectstatic
+sudo docker exec -it myapp-web python manage.py collectstatic
 ```
 
-Files will be generated under `/data/diet/app/static/` directory.
+Files will be generated under `/data/myapp/app/static/` directory.
 
 ### Migrate database
 
 ```
-sudo docker exec -it diet-web python manage.py migrate
+sudo docker exec -it myapp-web python manage.py migrate
 ```
 
 ### Backup and restore database
@@ -125,15 +125,15 @@ See [PostgreSQL Terraform Module (Dockerized)](https://github.com/davidfischer-c
 ### Backup media assets
 
 ```
-BACKUP_PATH=/my/backup/diet-dev/
-rsync -ah -lH --delete --progress /data/diet-dev/app/media/ "$BACKUP_PATH/media/"
-rsync -ah -lH --delete --progress /data/diet-dev/app/protected/ "$BACKUP_PATH/protected/"
+BACKUP_PATH=/my/backup/myapp-dev/
+rsync -ah -lH --delete --progress /data/myapp-dev/app/media/ "$BACKUP_PATH/media/"
+rsync -ah -lH --delete --progress /data/myapp-dev/app/protected/ "$BACKUP_PATH/protected/"
 ```
 
 ### Restore media assets
 
 ```
-BACKUP_PATH=/my/backup/diet-dev/
-rsync -ah -lH --delete --progress "$BACKUP_PATH/media/" /data/diet-dev/app/media/
-rsync -ah -lH --delete --progress "$BACKUP_PATH/protected/" /data/diet-dev/app/protected/
+BACKUP_PATH=/my/backup/myapp-dev/
+rsync -ah -lH --delete --progress "$BACKUP_PATH/media/" /data/myapp-dev/app/media/
+rsync -ah -lH --delete --progress "$BACKUP_PATH/protected/" /data/myapp-dev/app/protected/
 ```
