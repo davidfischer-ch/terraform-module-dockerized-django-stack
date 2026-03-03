@@ -6,6 +6,8 @@ Manage a "standardized" Django application's stack.
 
 ## Example
 
+See [examples/default](examples/default) for a complete working configuration.
+
 Example for an application called `diet` :
 
 ```hcl
