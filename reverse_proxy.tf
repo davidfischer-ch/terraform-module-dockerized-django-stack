@@ -8,6 +8,7 @@ module "reverse_proxy" {
 
   identifier     = "${var.identifier}-reverse-proxy"
   enabled        = var.enabled
+  wait           = var.wait
   image_id       = docker_image.nginx.image_id
   app_uid        = var.nginx_uid
   app_gid        = var.nginx_gid

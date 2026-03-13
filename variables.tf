@@ -12,6 +12,15 @@ variable "enabled" {
   description = "Toggle the containers (started or stopped)."
 }
 
+variable "wait" {
+  type        = bool
+  default     = false
+  description = <<EOT
+    Wait for the containers to reach an healthy state after creation.
+    Current restriction: Applies only for Nginx, PostgreSQL and Redis.
+  EOT
+}
+
 # Process ------------------------------------------------------------------------------------------
 
 variable "app_image_name" {

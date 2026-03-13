@@ -13,6 +13,7 @@ module "database" {
 
   identifier     = "${var.identifier}-database"
   enabled        = var.enabled
+  wait           = var.wait
   image_id       = docker_image.postgresql.image_id
   app_uid        = var.postgresql_uid
   app_gid        = var.postgresql_gid
