@@ -1,3 +1,7 @@
+data "external" "current_user" {
+  program = ["sh", "-c", "printf '{\"uid\":\"%s\",\"gid\":\"%s\"}' \"$(id -u)\" \"$(id -g)\""]
+}
+
 resource "aws_route53_zone" "main" {
   name = "example.com"
 }
@@ -24,12 +28,12 @@ module "myapp" {
 
   identifier     = "myapp"
   enabled        = true
-  data_directory = "/data/myapp"
+  data_directory = pathexpand("~/.apps/myapp")
 
   # Networking
 
-  https_port = 443
-  http_port  = 80
+  https_port = 8443
+  http_port  = 8080
 
   # Reverse Proxy
 
@@ -50,12 +54,23 @@ module "myapp" {
   debug_toolbar_template_profiler = false
   default_from_email              = "noreply@example.com"
   domains                         = ["myapp.example.com"]
-  email_subject_prefix            = "[My Application] "
+  email_subject_prefix            = "[My Application | DEV] "
 
   app_image_name        = "your-registry.io/myapp:latest"
   nginx_image_name      = "nginx:1.28.0"   # https://hub.docker.com/_/nginx/tags
   postgresql_image_name = "postgres:15.10" # https://hub.docker.com/_/postgres/tags
   redis_image_name      = "redis:7.4.2"    # https://hub.docker.com/_/redis/tags
+
+  # Process — run all containers as the current host user
+
+  app_uid        = tonumber(data.external.current_user.result.uid)
+  app_gid        = tonumber(data.external.current_user.result.gid)
+  redis_uid      = tonumber(data.external.current_user.result.uid)
+  redis_gid      = tonumber(data.external.current_user.result.gid)
+  postgresql_uid = tonumber(data.external.current_user.result.uid)
+  postgresql_gid = tonumber(data.external.current_user.result.gid)
+  nginx_uid      = tonumber(data.external.current_user.result.uid)
+  nginx_gid      = tonumber(data.external.current_user.result.gid)
 
   web = {
     concurrency = 4

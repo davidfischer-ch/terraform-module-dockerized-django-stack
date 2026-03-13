@@ -9,11 +9,13 @@ resource "random_password" "broker" {
 }
 
 module "broker" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-redis.git?ref=1.0.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-redis.git?ref=1.1.0"
 
   identifier     = "${var.identifier}-broker"
   enabled        = var.enabled
   image_id       = docker_image.redis.image_id
+  app_uid        = var.redis_uid
+  app_gid        = var.redis_gid
   data_directory = "${var.data_directory}/broker"
 
   hosts      = var.hosts

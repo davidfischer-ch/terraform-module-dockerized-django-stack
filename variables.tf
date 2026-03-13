@@ -12,17 +12,23 @@ variable "enabled" {
   description = "Toggle the containers (started or stopped)."
 }
 
-# Storage ------------------------------------------------------------------------------------------
+# Process ------------------------------------------------------------------------------------------
 
-variable "data_directory" {
+variable "app_image_name" {
   type        = string
-  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
+  description = "Django application's image name"
 }
 
-variable "data_owner" {
-  type        = string
-  default     = "1001:1001"
-  description = "Used to set the ownership of application's data directories."
+variable "app_uid" {
+  type        = number
+  default     = 1001
+  description = "UID of the user running the application container(s) and owning the data."
+}
+
+variable "app_gid" {
+  type        = number
+  default     = 1001
+  description = "GID of the user running the application container(s) and owning the data."
 }
 
 # Networking ---------------------------------------------------------------------------------------
@@ -41,6 +47,13 @@ variable "https_port" {
 variable "http_port" {
   type        = number
   description = "Bind the reverse proxy's HTTP port."
+}
+
+# Storage ------------------------------------------------------------------------------------------
+
+variable "data_directory" {
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Reverse Proxy ------------------------------------------------------------------------------------
@@ -189,29 +202,43 @@ variable "managers" {
   default = []
 }
 
-# Images -------------------------------------------------------------------------------------------
-
-variable "app_image_name" {
-  type        = string
-  description = "Django application's image name"
-}
-
-variable "nginx_image_name" {
-  type    = string
-  default = "nginx:latest"
-}
-
-variable "postgresql_image_name" {
-  type    = string
-  default = "postgres:latest"
-}
+# Broker Container ---------------------------------------------------------------------------------
 
 variable "redis_image_name" {
   type    = string
   default = "redis:latest"
 }
 
+variable "redis_uid" {
+  type        = number
+  default     = 999
+  description = "UID of the user running the broker container and owning the data."
+}
+
+variable "redis_gid" {
+  type        = number
+  default     = 999
+  description = "GID of the user running the broker container and owning the data."
+}
+
 # Database Container -------------------------------------------------------------------------------
+
+variable "postgresql_image_name" {
+  type    = string
+  default = "postgres:latest"
+}
+
+variable "postgresql_uid" {
+  type        = number
+  default     = 999
+  description = "UID of the user running the database container and owning the data directories."
+}
+
+variable "postgresql_gid" {
+  type        = number
+  default     = 0
+  description = "GID of the user running the database container and owning the data directories."
+}
 
 variable "postgresql_max_connections" {
   type    = number
@@ -219,6 +246,29 @@ variable "postgresql_max_connections" {
 }
 
 # Reverse Proxy Container --------------------------------------------------------------------------
+
+variable "nginx_image_name" {
+  type    = string
+  default = "nginx:latest"
+}
+
+variable "nginx_uid" {
+  type        = number
+  default     = 0
+  description = <<EOT
+    UID of the user running the reverse-proxy container.
+    If not root then NET_IND_SERVICE capability will be added for nginx to bind ports 80/443.
+  EOT
+}
+
+variable "nginx_gid" {
+  type        = number
+  default     = 0
+  description = <<EOT
+    GID of the user running the reverse-proxy container.
+    If not root then NET_IND_SERVICE capability will be added for nginx to bind ports 80/443.
+  EOT
+}
 
 variable "nginx_log_level" {
   type    = string

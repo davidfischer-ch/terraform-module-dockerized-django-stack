@@ -1,5 +1,28 @@
 # Changelog
 
+## Release v1.1.0 (2026-03-13)
+
+### Minor compatibility breaks
+
+* Replace `data_owner` by `app_uid`, `app_gid` with the same default values of `1001`
+
+### Features
+
+* Add `app_uid`/`app_gid` process identity variables for the Django app & workers (default `1001`)
+* Add `nginx_uid`/`nginx_gid` process identity variables for the reverse proxy (default `0`)
+* Add `postgresql_uid`/`postgresql_gid` process identity variables for the database (default `999`/`0`)
+* Add `redis_uid`/`redis_gid` process identity variables for the broker (default `999`)
+* Automatically adds `NET_BIND_SERVICE` capability to nginx container if `uid` is not root (required for ports binding)
+
+### Fix and enhancements
+
+* Upgrade `django-app` module version to 1.1.0
+* Upgrade `nginx` module version to 1.1.1
+* Upgrade `postgresql` module version to 1.2.0
+* Upgrade `redis` module version to 1.1.0
+* Add `examples/default/` (server deployment) and `examples/current-user/` (local dev as current user)
+* Update README accordingly
+
 ## Release v1.0.4 (2026-02-24)
 
 ### Features

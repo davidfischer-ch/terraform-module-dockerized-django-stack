@@ -4,13 +4,16 @@ resource "docker_image" "app" {
 }
 
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.0.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.0"
 
-  identifier     = var.identifier
-  enabled        = var.enabled
-  image_id       = docker_image.app.image_id
+  identifier = var.identifier
+  enabled    = var.enabled
+  image_id   = docker_image.app.image_id
+
+  app_uid = var.app_uid
+  app_gid = var.app_gid
+
   data_directory = "${var.data_directory}/app"
-  data_owner     = var.data_owner
 
   # Networking
 

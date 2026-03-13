@@ -4,49 +4,28 @@ Manage a "standardized" Django application's stack.
 
 [TOC]
 
-## Example
+## Examples
+
+### Server deployment (default)
 
 See [examples/default](examples/default) for a complete working configuration.
 
-Example for an application called `myapp` :
+Runs all containers as their default service-account users (e.g. `postgres:999`, `redis:999`) on
+standard ports. Intended for server deployments where the host user is root or has the necessary
+privileges to provision services and change files ownership.
 
 ```hcl
-provider "acme" {
-  server_url = "https://acme-v02.api.letsencrypt.org/directory"
-}
+module "myapp" {
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.1.0"
 
-resource "aws_route53_zone" "main" {
-  name = "example.com"
-}
-
-resource "acme_registration" "main" {
-  email_address = "admin@example.com"
-}
-
-resource "acme_certificate" "myapp" {
-  account_key_pem = acme_registration.main.account_key_pem
-  common_name     = "myapp.example.com"
-
-  dns_challenge {
-    provider = "route53"
-
-    config = {
-      AWS_HOSTED_ZONE_ID = aws_route53_zone.main.zone_id
-    }
-  }
-}
-
-module "myapp_dev" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.0.4"
-
-  identifier     = "myapp-dev"
+  identifier     = "myapp"
   enabled        = true
-  data_directory = "/data/myapp-dev"
+  data_directory = "/data/myapp"
 
   # Networking
 
-  https_port = 10443
-  http_port  = 10080
+  https_port = 443
+  http_port  = 80
 
   # Reverse Proxy
 
@@ -59,44 +38,68 @@ module "myapp_dev" {
   project_name                    = "MyApp"
   project_app                     = "myapp"
   site_name                       = "My Application"
-  settings                        = {}
   admin_name                      = "Admin User"
   admin_email                     = "admin@example.com"
-  admin_url                       = "A2br2wZDmTHlCjQq"
-  compress_enabled                = false
-  compress_offline                = false
   csrf_trusted_origins            = ["https://myapp.example.com"]
-  debug                           = true
-  debug_toolbar                   = true
-  debug_toolbar_template_profiler = true
-  default_from_email              = "admin@example.com"
+  debug                           = false
+  debug_toolbar                   = false
+  debug_toolbar_template_profiler = false
+  default_from_email              = "noreply@example.com"
   domains                         = ["myapp.example.com"]
-  email_backend                   = "django.core.mail.backends.dummy.EmailBackend"
-  email_subject_prefix            = "[My Application | DEV] "
-  managers                        = []
+  email_subject_prefix            = "[My Application] "
 
-  app_image_name = "your-registry.io/myapp:3.0.2-1"
+  app_image_name        = "your-registry.io/myapp:latest"
+  nginx_image_name      = "nginx:1.28.0"
+  postgresql_image_name = "postgres:15.10"
+  redis_image_name      = "redis:7.4.2"
 
-  nginx_image_name      = "nginx:1.28.0"   # https://hub.docker.com/_/nginx/tags
-  postgresql_image_name = "postgres:15.10" # https://hub.docker.com/_/postgres/tags
-  redis_image_name      = "redis:7.4.2"    # https://hub.docker.com/_/redis/tags
-
-  web = {
-    concurrency = 4
-    log_level   = "info"
-  }
-
-  beat = {
-    log_level = "info"
-  }
-
+  web    = { concurrency = 4, log_level = "info" }
+  beat   = { log_level = "info" }
   workers = {
-    default = {
-      name      = "default"
-      queues    = ["default"]
-      log_level = "info"
-    }
+    default = { name = "default", queues = ["default"], log_level = "info" }
   }
+}
+```
+
+### Local development (sudoless)
+
+See [examples/current-user](examples/current-user) for a complete working configuration.
+
+Runs all containers as the current host user via `data.external.current_user`, stores data under
+`~/.apps/myapp`, and binds unprivileged ports (`8080`/`8443`) so no `sudo` is required.
+Nginx automatically receives `NET_BIND_SERVICE` when `nginx_uid` is non-zero.
+
+```hcl
+data "external" "current_user" {
+  program = ["sh", "-c", "printf '{\"uid\":\"%s\",\"gid\":\"%s\"}' \"$(id -u)\" \"$(id -g)\""]
+}
+
+module "myapp" {
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.1.0"
+
+  identifier     = "myapp"
+  enabled        = true
+  data_directory = pathexpand("~/.apps/myapp")
+
+  # Networking
+
+  https_port = 8443
+  http_port  = 8080
+
+  # ...
+
+  # Process — run all containers as the current host user
+
+  app_uid        = tonumber(data.external.current_user.result.uid)
+  app_gid        = tonumber(data.external.current_user.result.gid)
+  redis_uid      = tonumber(data.external.current_user.result.uid)
+  redis_gid      = tonumber(data.external.current_user.result.gid)
+  postgresql_uid = tonumber(data.external.current_user.result.uid)
+  postgresql_gid = tonumber(data.external.current_user.result.gid)
+  nginx_uid      = tonumber(data.external.current_user.result.uid)
+  nginx_gid      = tonumber(data.external.current_user.result.gid)
+
+  # ...
 }
 ```
 

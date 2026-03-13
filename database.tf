@@ -9,11 +9,13 @@ resource "random_password" "database" {
 }
 
 module "database" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql.git?ref=1.0.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql.git?ref=1.2.0"
 
   identifier     = "${var.identifier}-database"
   enabled        = var.enabled
   image_id       = docker_image.postgresql.image_id
+  app_uid        = var.postgresql_uid
+  app_gid        = var.postgresql_gid
   data_directory = "${var.data_directory}/database"
 
   hosts      = var.hosts
