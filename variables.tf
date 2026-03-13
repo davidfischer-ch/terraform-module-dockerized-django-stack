@@ -1,6 +1,7 @@
 variable "identifier" {
   type        = string
   description = "Identifier (must be unique, used to name resources)."
+
   validation {
     condition     = regex("^[a-z]+(-[a-z0-9]+)*$", var.identifier) != null
     error_message = "Argument `identifier` must match regex ^[a-z]+(-[a-z0-9]+)*$."
@@ -9,17 +10,17 @@ variable "identifier" {
 
 variable "enabled" {
   type        = bool
-  default     = true
   description = "Toggle the containers (started or stopped)."
+  default     = true
 }
 
 variable "wait" {
   type        = bool
-  default     = true
   description = <<EOT
     Wait for the containers to reach an healthy state after creation.
     Current restriction: Applies only for Nginx, PostgreSQL and Redis.
   EOT
+  default     = true
 }
 
 # Process ------------------------------------------------------------------------------------------
@@ -31,58 +32,72 @@ variable "app_image_name" {
 
 variable "app_uid" {
   type        = number
-  default     = 1001
   description = "UID of the user running the application container(s) and owning the data."
+  default     = 1001
 }
 
 variable "app_gid" {
   type        = number
-  default     = 1001
   description = "GID of the user running the application container(s) and owning the data."
+  default     = 1001
 }
 
 # Networking ---------------------------------------------------------------------------------------
 
 variable "hosts" {
   type        = map(string)
-  default     = {}
   description = "Add entries to container hosts file."
+  default     = {}
 }
 
 variable "https_port" {
   type        = number
   description = "Bind the reverse proxy's HTTPS port."
+
+  validation {
+    condition     = var.https_port >= 1 && var.https_port <= 65535
+    error_message = "Argument `https_port` must be between 1 and 65535."
+  }
 }
 
 variable "http_port" {
   type        = number
   description = "Bind the reverse proxy's HTTP port."
+
+  validation {
+    condition     = var.http_port >= 1 && var.http_port <= 65535
+    error_message = "Argument `http_port` must be between 1 and 65535."
+  }
 }
 
 # Reverse Proxy ------------------------------------------------------------------------------------
 
 variable "dhparam_use_dsa" {
   type        = bool
-  default     = false
   description = <<EOT
     Use DSA (converted to DH) instead of "pure" DH params (DH by default).
     Much faster to generate but using "weaker" prime numbers.
 
     See https://docs.openssl.org/3.4/man1/openssl-dhparam/#options
   EOT
+  default     = false
 }
 
 variable "ssl_crt" {
-  type = string
+  type        = string
+  description = "TLS certificate content (PEM format)."
 }
 
 variable "ssl_key" {
-  type = string
+  type        = string
+  description = "TLS private key content (PEM format)."
+  sensitive   = true
 }
 
 variable "max_body_size" {
-  type    = string
-  default = "20M"
+  type        = string
+  description = "Maximum allowed size of the client request body (default: \"20M\")."
+  default     = "20M"
 }
 
 # Storage ------------------------------------------------------------------------------------------
@@ -111,149 +126,201 @@ variable "site_name" {
 
 variable "settings" {
   type        = map(string)
-  default     = {}
   description = "Any additional environment variables for the application (e.g. { FOO = \"bar\" })"
+  default     = {}
 }
 
 variable "admin_name" {
-  type = string
+  type        = string
+  description = "Django admin full name."
 }
 
 variable "admin_email" {
-  type = string
+  type        = string
+  description = "Django admin email address."
+
+  validation {
+    condition     = can(regex("^[^@]+@[^@]+$", var.admin_email))
+    error_message = "Argument `admin_email` must be a valid email address."
+  }
 }
 
 variable "admin_url" {
-  type    = string
-  default = "admin"
+  type        = string
+  description = "URL path for the Django admin interface."
+  default     = "admin"
+
+  validation {
+    condition     = length(var.admin_url) > 0
+    error_message = "Argument `admin_url` must not be empty."
+  }
 }
 
 variable "compress_enabled" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Enable Django Compressor."
+  default     = false
 }
 
 variable "compress_offline" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Enable Django Compressor offline compression."
+  default     = false
 }
 
 variable "csrf_trusted_origins" {
-  type = list(string)
+  type        = list(string)
+  description = "List of trusted origins for CSRF protection."
 }
 
 variable "debug" {
-  type = bool
+  type        = bool
+  description = "Enable Django debug mode."
+  default     = false
 }
 
 variable "debug_toolbar" {
-  type = bool
+  type        = bool
+  description = "Enable Django Debug Toolbar."
+  default     = false
 }
 
 variable "debug_toolbar_template_profiler" {
-  type = bool
+  type        = bool
+  description = "Enable template profiler in Django Debug Toolbar."
+  default     = false
 }
 
 variable "default_from_email" {
-  type = string
+  type        = string
+  description = "Default sender address for outgoing emails."
+
+  validation {
+    condition     = can(regex("^[^@]+@[^@]+$", var.default_from_email))
+    error_message = "Argument `default_from_email` must be a valid email address."
+  }
 }
 
 variable "domains" {
-  type = list(string)
+  type        = list(string)
+  description = "Allowed domains for the application (used in nginx server_name)."
 }
 
 variable "email_backend" {
-  type    = string
-  default = "django.core.mail.backends.dummy.EmailBackend"
+  type        = string
+  description = "Django email backend class."
+  default     = "django.core.mail.backends.dummy.EmailBackend"
 }
 
 variable "email_file_path" {
-  type    = string
-  default = ""
+  type        = string
+  description = "File path for the file-based email backend."
+  default     = ""
 }
 
 variable "email_host" {
-  type    = string
-  default = ""
+  type        = string
+  description = "SMTP server hostname."
+  default     = ""
 }
 
 variable "email_host_password" {
-  type      = string
-  sensitive = true
-  default   = ""
+  type        = string
+  description = "SMTP server password."
+  default     = ""
+  sensitive   = true
 }
 
 variable "email_host_user" {
-  type    = string
-  default = ""
+  type        = string
+  description = "SMTP server username."
+  default     = ""
 }
 
 variable "email_port" {
-  type    = number
-  default = 465
+  type        = number
+  description = "SMTP server port."
+  default     = 465
+
+  validation {
+    condition     = var.email_port >= 1 && var.email_port <= 65535
+    error_message = "Argument `email_port` must be between 1 and 65535."
+  }
 }
 
 variable "email_subject_prefix" {
-  type = string
+  type        = string
+  description = "Prefix prepended to the subject of emails sent to admins and managers."
 }
 
 variable "email_use_ssl" {
-  type    = bool
-  default = true
+  type        = bool
+  description = "Use implicit TLS (SMTPS) when connecting to the SMTP server."
+  default     = true
 }
 
 variable "email_use_tls" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Use explicit TLS (STARTTLS) when connecting to the SMTP server."
+  default     = false
 }
 
 variable "managers" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  description = "List of manager email addresses to receive broken link notifications."
+  default     = []
+
+  validation {
+    condition     = alltrue([for m in var.managers : can(regex("^[^@]+@[^@]+$", m))])
+    error_message = "Each entry in `managers` must be a valid email address."
+  }
 }
 
 # Broker Container ---------------------------------------------------------------------------------
 
 variable "redis_image_name" {
-  type    = string
-  default = "redis:latest"
+  type        = string
+  description = "Redis image name."
+  default     = "redis:latest"
 }
 
 variable "redis_uid" {
   type        = number
-  default     = 999
   description = "UID of the user running the broker container and owning the data."
+  default     = 999
 }
 
 variable "redis_gid" {
   type        = number
-  default     = 999
   description = "GID of the user running the broker container and owning the data."
+  default     = 999
 }
 
 # Database Container -------------------------------------------------------------------------------
 
 variable "postgresql_image_name" {
-  type    = string
-  default = "postgres:latest"
+  type        = string
+  description = "PostgreSQL image name."
+  default     = "postgres:latest"
 }
 
 variable "postgresql_uid" {
   type        = number
-  default     = 999
   description = "UID of the user running the database container and owning the data directories."
+  default     = 999
 }
 
 variable "postgresql_gid" {
   type        = number
-  default     = 0
   description = "GID of the user running the database container and owning the data directories."
+  default     = 0
 }
 
 variable "postgresql_max_connections" {
   type        = number
-  default     = 100
   description = "Maximum number of PostgreSQL connections."
+  default     = 100
+
   validation {
     condition     = var.postgresql_max_connections >= 1 && var.postgresql_max_connections <= 262143
     error_message = "Argument `postgresql_max_connections` should be between 1 and 262143."
@@ -263,42 +330,45 @@ variable "postgresql_max_connections" {
 # Reverse Proxy Container --------------------------------------------------------------------------
 
 variable "nginx_image_name" {
-  type    = string
-  default = "nginx:latest"
+  type        = string
+  description = "Nginx image name."
+  default     = "nginx:latest"
 }
 
 variable "nginx_uid" {
   type        = number
-  default     = 0
   description = <<EOT
     UID of the user running the reverse-proxy container.
     If not root then NET_IND_SERVICE capability will be added for nginx to bind ports 80/443.
   EOT
+  default     = 0
 }
 
 variable "nginx_gid" {
   type        = number
-  default     = 0
   description = <<EOT
     GID of the user running the reverse-proxy container.
     If not root then NET_IND_SERVICE capability will be added for nginx to bind ports 80/443.
   EOT
+  default     = 0
 }
 
 variable "nginx_log_level" {
-  type    = string
-  default = "warn"
+  type        = string
+  description = "Nginx error log level."
+  default     = "warn"
 }
 
 variable "nginx_modules" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  description = "Nginx modules to enable."
+  default     = []
 }
 
 variable "with_spa" {
   type        = bool
-  default     = false
   description = "Serve a bundled React SPA from Nginx (try_files fallback to index.html)."
+  default     = false
 }
 
 # Web Container ------------------------------------------------------------------------------------

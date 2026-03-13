@@ -8,10 +8,10 @@ module "app" {
 
   identifier = var.identifier
   enabled    = var.enabled
-  image_id   = docker_image.app.image_id
 
-  app_uid = var.app_uid
-  app_gid = var.app_gid
+  image_id = docker_image.app.image_id
+  app_uid  = var.app_uid
+  app_gid  = var.app_gid
 
   data_directory = "${var.data_directory}/app"
 
