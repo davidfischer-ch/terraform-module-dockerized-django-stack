@@ -26,8 +26,14 @@ resource "acme_certificate" "myapp" {
 module "myapp" {
   source = "../../"
 
-  identifier     = "myapp"
-  data_directory = pathexpand("~/.apps/myapp")
+  identifier = "myapp"
+
+  # Process
+
+  app_image_name = "your-registry.io/myapp:latest"
+
+  app_uid = tonumber(data.external.current_user.result.uid)
+  app_gid = tonumber(data.external.current_user.result.gid)
 
   # Networking
 
@@ -38,6 +44,10 @@ module "myapp" {
 
   ssl_crt = join("", [acme_certificate.myapp.certificate_pem, acme_certificate.myapp.issuer_pem])
   ssl_key = acme_certificate.myapp.private_key_pem
+
+  # Storage
+
+  data_directory = pathexpand("~/.apps/myapp")
 
   # Django Application
 
@@ -51,26 +61,35 @@ module "myapp" {
   domains              = ["myapp.example.com"]
   email_subject_prefix = "[My Application | DEV] "
 
-  app_image_name        = "your-registry.io/myapp:latest"
-  nginx_image_name      = "nginx:1.28.0"   # https://hub.docker.com/_/nginx/tags
+  # Broker Container
+
+  redis_image_name = "redis:7.4.2" # https://hub.docker.com/_/redis/tags
+
+  redis_uid = tonumber(data.external.current_user.result.uid)
+  redis_gid = tonumber(data.external.current_user.result.gid)
+
+  # Database Container
+
   postgresql_image_name = "postgres:15.10" # https://hub.docker.com/_/postgres/tags
-  redis_image_name      = "redis:7.4.2"    # https://hub.docker.com/_/redis/tags
 
-  # Process — run all containers as the current host user
-
-  app_uid        = tonumber(data.external.current_user.result.uid)
-  app_gid        = tonumber(data.external.current_user.result.gid)
-  redis_uid      = tonumber(data.external.current_user.result.uid)
-  redis_gid      = tonumber(data.external.current_user.result.gid)
   postgresql_uid = tonumber(data.external.current_user.result.uid)
   postgresql_gid = tonumber(data.external.current_user.result.gid)
-  nginx_uid      = tonumber(data.external.current_user.result.uid)
-  nginx_gid      = tonumber(data.external.current_user.result.gid)
+
+  # Reverse Proxy Container
+
+  nginx_image_name = "nginx:1.28.0" # https://hub.docker.com/_/nginx/tags
+
+  nginx_uid = tonumber(data.external.current_user.result.uid)
+  nginx_gid = tonumber(data.external.current_user.result.gid)
+
+  # Web Container
 
   web = {
     concurrency = 4
     log_level   = "info"
   }
+
+  # Workers Containers
 
   beat = {
     log_level = "info"

@@ -22,8 +22,11 @@ resource "acme_certificate" "myapp" {
 module "myapp" {
   source = "../../"
 
-  identifier     = "myapp"
-  data_directory = "/data/myapp"
+  identifier = "myapp"
+
+  # Process
+
+  app_image_name = "your-registry.io/myapp:latest"
 
   # Networking
 
@@ -34,6 +37,10 @@ module "myapp" {
 
   ssl_crt = join("", [acme_certificate.myapp.certificate_pem, acme_certificate.myapp.issuer_pem])
   ssl_key = acme_certificate.myapp.private_key_pem
+
+  # Storage
+
+  data_directory = "/data/myapp"
 
   # Django Application
 
@@ -47,15 +54,26 @@ module "myapp" {
   domains              = ["myapp.example.com"]
   email_subject_prefix = "[My Application] "
 
-  app_image_name        = "your-registry.io/myapp:latest"
-  nginx_image_name      = "nginx:1.28.0"   # https://hub.docker.com/_/nginx/tags
+  # Broker Container
+
+  redis_image_name = "redis:7.4.2" # https://hub.docker.com/_/redis/tags
+
+  # Database Container
+
   postgresql_image_name = "postgres:15.10" # https://hub.docker.com/_/postgres/tags
-  redis_image_name      = "redis:7.4.2"    # https://hub.docker.com/_/redis/tags
+
+  # Reverse Proxy Container
+
+  nginx_image_name = "nginx:1.28.0" # https://hub.docker.com/_/nginx/tags
+
+  # Web Container
 
   web = {
     concurrency = 4
     log_level   = "info"
   }
+
+  # Workers Containers
 
   beat = {
     log_level = "info"

@@ -23,8 +23,11 @@ privileges to provision services and change files ownership.
 module "myapp" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.2.0"
 
-  identifier     = "myapp"
-  data_directory = "/data/myapp"
+  identifier = "myapp"
+
+  # Process
+
+  app_image_name = "your-registry.io/myapp:latest"
 
   # Networking
 
@@ -35,6 +38,10 @@ module "myapp" {
 
   ssl_crt = join("", [acme_certificate.myapp.certificate_pem, acme_certificate.myapp.issuer_pem])
   ssl_key = acme_certificate.myapp.private_key_pem
+
+  # Storage
+
+  data_directory = "/data/myapp"
 
   # Django Application
 
@@ -48,13 +55,25 @@ module "myapp" {
   domains              = ["myapp.example.com"]
   email_subject_prefix = "[My Application] "
 
-  app_image_name        = "your-registry.io/myapp:latest"
-  nginx_image_name      = "nginx:1.28.0"
-  postgresql_image_name = "postgres:15.10"
-  redis_image_name      = "redis:7.4.2"
+  # Broker Container
 
-  web    = { concurrency = 4, log_level = "info" }
-  beat   = { log_level = "info" }
+  redis_image_name = "redis:7.4.2"
+
+  # Database Container
+
+  postgresql_image_name = "postgres:15.10"
+
+  # Reverse Proxy Container
+
+  nginx_image_name = "nginx:1.28.0"
+
+  # Web Container
+
+  web = { concurrency = 4, log_level = "info" }
+
+  # Workers Containers
+
+  beat    = { log_level = "info" }
   workers = {
     default = { name = "default", queues = ["default"], log_level = "info" }
   }
@@ -77,13 +96,16 @@ data "external" "current_user" {
 module "myapp" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.2.0"
 
-  identifier     = "myapp"
-  data_directory = pathexpand("~/.apps/myapp")
+  identifier = "myapp"
 
   # Networking
 
   https_port = 8443
   http_port  = 8080
+
+  # Storage
+
+  data_directory = pathexpand("~/.apps/myapp")
 
   # ...
 
@@ -160,9 +182,9 @@ terraform apply
 | `compress_enabled` | `bool` | `false` | Enable Django Compressor. |
 | `compress_offline` | `bool` | `false` | Enable offline compression. |
 | `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
-| `debug` | `bool` | — | Enable Django debug mode. |
-| `debug_toolbar` | `bool` | — | Enable Django Debug Toolbar. |
-| `debug_toolbar_template_profiler` | `bool` | — | Enable Debug Toolbar template profiler. |
+| `debug` | `bool` | `false` | Enable Django debug mode. |
+| `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
+| `debug_toolbar_template_profiler` | `bool` | `false` | Enable Debug Toolbar template profiler. |
 | `default_from_email` | `string` | — | Default sender email address. |
 | `domains` | `list(string)` | — | Allowed domains (`ALLOWED_HOSTS`). |
 | `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |
