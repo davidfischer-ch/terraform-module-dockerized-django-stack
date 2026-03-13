@@ -6,13 +6,15 @@ resource "docker_image" "nginx" {
 module "reverse_proxy" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.1.2"
 
-  identifier     = "${var.identifier}-reverse-proxy"
-  enabled        = var.enabled
-  wait           = var.wait
-  image_id       = docker_image.nginx.image_id
-  app_uid        = var.nginx_uid
-  app_gid        = var.nginx_gid
-  cap_add        = var.nginx_uid == 0 ? [] : ["CAP_NET_BIND_SERVICE"]
+  identifier = "${var.identifier}-reverse-proxy"
+  enabled    = var.enabled
+  wait       = var.wait
+
+  image_id = docker_image.nginx.image_id
+  app_uid  = var.nginx_uid
+  app_gid  = var.nginx_gid
+  cap_add  = var.nginx_uid == 0 ? [] : ["CAP_NET_BIND_SERVICE"]
+
   data_directory = "${var.data_directory}/reverse-proxy"
 
   # Logging

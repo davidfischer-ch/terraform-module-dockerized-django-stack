@@ -250,8 +250,13 @@ variable "postgresql_gid" {
 }
 
 variable "postgresql_max_connections" {
-  type    = number
-  default = 100
+  type        = number
+  default     = 100
+  description = "Maximum number of PostgreSQL connections."
+  validation {
+    condition     = var.postgresql_max_connections >= 1 && var.postgresql_max_connections <= 262143
+    error_message = "Argument `postgresql_max_connections` should be between 1 and 262143."
+  }
 }
 
 # Reverse Proxy Container --------------------------------------------------------------------------
