@@ -49,13 +49,6 @@ variable "http_port" {
   description = "Bind the reverse proxy's HTTP port."
 }
 
-# Storage ------------------------------------------------------------------------------------------
-
-variable "data_directory" {
-  type        = string
-  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
-}
-
 # Reverse Proxy ------------------------------------------------------------------------------------
 
 variable "dhparam_use_dsa" {
@@ -80,6 +73,13 @@ variable "ssl_key" {
 variable "max_body_size" {
   type    = string
   default = "20M"
+}
+
+# Storage ------------------------------------------------------------------------------------------
+
+variable "data_directory" {
+  type        = string
+  description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
 # Django Application -------------------------------------------------------------------------------
