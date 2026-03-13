@@ -4,7 +4,7 @@ resource "docker_image" "nginx" {
 }
 
 module "reverse_proxy" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.1.3"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.2.0"
 
   identifier = "${var.identifier}-reverse-proxy"
   enabled    = var.enabled
@@ -13,7 +13,7 @@ module "reverse_proxy" {
   image_id = docker_image.nginx.image_id
   app_uid  = var.nginx_uid
   app_gid  = var.nginx_gid
-  cap_add  = var.nginx_uid == 0 ? [] : ["CAP_NET_BIND_SERVICE"]
+  cap_add  = var.nginx_uid == 0 ? [] : ["NET_BIND_SERVICE"]
 
   data_directory = "${var.data_directory}/reverse-proxy"
 
@@ -28,9 +28,9 @@ module "reverse_proxy" {
   # Networking
 
   hosts      = var.hosts
-  network_id = docker_network.app.id
   https_port = var.https_port
   http_port  = var.http_port
+  network_id = docker_network.app.id
 
   # Security
 
