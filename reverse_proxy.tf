@@ -4,7 +4,7 @@ resource "docker_image" "nginx" {
 }
 
 module "reverse_proxy" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.1.2"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.1.3"
 
   identifier = "${var.identifier}-reverse-proxy"
   enabled    = var.enabled
@@ -38,23 +38,23 @@ module "reverse_proxy" {
 
   # Volumes
 
-  extra_volumes = [
-    {
+  extra_volumes = {
+    media = {
       container_path = "/data/media"
       host_path      = module.app.media_directory
       read_only      = true
-    },
-    {
+    }
+    protected = {
       container_path = "/data/protected"
       host_path      = module.app.protected_directory
       read_only      = true
-    },
-    {
+    }
+    static = {
       container_path = "/data/static"
       host_path      = module.app.static_directory
       read_only      = true
     }
-  ]
+  }
 
   # Sites
 

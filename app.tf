@@ -4,7 +4,7 @@ resource "docker_image" "app" {
 }
 
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.1.1"
 
   identifier = var.identifier
   enabled    = var.enabled

@@ -1,5 +1,21 @@
 # Changelog
 
+## Release v1.2.0 (2026-03-13)
+
+### Minor compatibility breaks
+
+* Change `extra_volumes` type from `list(object)` to `map(object)` — existing list usages must be converted to a map with named keys
+
+### Fix and enhancements
+
+* Upgrade `django-app` module to 1.1.1
+* Upgrade `nginx` module to 1.1.3
+* Upgrade `postgresql` module to 1.2.2
+* Upgrade `redis` module to 1.1.1
+* Set `enabled` and `wait` defaults to `true`
+* Refine variable descriptions, validators, and attribute ordering
+* Remove redundant default values from examples and README
+
 ## Release v1.1.2 (2026-03-13)
 
 ### Fix and enhancements
