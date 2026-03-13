@@ -2,6 +2,11 @@
 
 Manage a "standardized" Django application's stack.
 
+* Runs all components on a dedicated bridge network
+* Creates a web container (Uvicorn ASGI), a Celery beat scheduler, and Celery workers, via the `django-app` sub-module
+* Provisions a PostgreSQL database, a Redis broker/cache, and an Nginx reverse proxy
+* Supports sudoless local development by running all containers as the current host user
+
 [TOC]
 
 ## Examples
@@ -103,9 +108,106 @@ module "myapp" {
 }
 ```
 
+## Data layout
+
+All persistent data lives under `data_directory`:
+
+```
+data_directory/
+├── app/
+│   ├── config/     # Generated settings.env
+│   ├── media/      # User-uploaded media files
+│   ├── protected/  # Protected files (served via X-Accel-Redirect)
+│   ├── static/     # Collected static files
+│   └── workers/    # Celery beat and worker state databases
+├── broker/         # Redis data
+├── database/       # PostgreSQL data
+└── reverse-proxy/  # Nginx configuration, certificates, dhparam
+```
+
+## Passwords
+
+The Redis broker and PostgreSQL database passwords are **generated automatically** by Terraform
+(`random_password`) and stored in the state file. They are never exposed as output variables.
+
+To rotate a password, taint the corresponding resource and re-apply:
+
+```
+terraform taint 'module.myapp.random_password.broker'
+terraform taint 'module.myapp.random_password.database'
+terraform apply
+```
+
+## Variables
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `identifier` | `string` | — | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
+| `enabled` | `bool` | — | Start or stop the containers. |
+| `wait` | `bool` | `false` | Wait for containers to reach a healthy state after creation (applies to Nginx, PostgreSQL, Redis). |
+| `app_image_name` | `string` | — | Django application Docker image name. |
+| `app_uid` | `number` | `1001` | UID of the user running the application containers and owning the data. |
+| `app_gid` | `number` | `1001` | GID of the user running the application containers and owning the data. |
+| `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the containers. |
+| `https_port` | `number` | — | Bind the reverse proxy's HTTPS port. |
+| `http_port` | `number` | — | Bind the reverse proxy's HTTP port. |
+| `dhparam_use_dsa` | `bool` | `false` | Use DSA instead of DH params (faster to generate but weaker). |
+| `ssl_crt` | `string` | — | SSL certificate (PEM). |
+| `ssl_key` | `string` | — | SSL private key (PEM, sensitive). |
+| `max_body_size` | `string` | `"20M"` | Nginx client max body size. |
+| `data_directory` | `string` | — | Host path for persistent volumes. |
+| `project_name` | `string` | — | Django project directory name (e.g. `MyApp`). |
+| `project_app` | `string` | — | Django project's main application name (e.g. `myapp`). |
+| `site_name` | `string` | — | Django site display name. |
+| `settings` | `map(string)` | `{}` | Additional environment variables for the application. |
+| `admin_name` | `string` | — | Admin display name. |
+| `admin_email` | `string` | — | Admin email address. |
+| `admin_url` | `string` | `"admin"` | Admin URL prefix. |
+| `compress_enabled` | `bool` | `false` | Enable Django Compressor. |
+| `compress_offline` | `bool` | `false` | Enable offline compression. |
+| `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
+| `debug` | `bool` | — | Enable Django debug mode. |
+| `debug_toolbar` | `bool` | — | Enable Django Debug Toolbar. |
+| `debug_toolbar_template_profiler` | `bool` | — | Enable Debug Toolbar template profiler. |
+| `default_from_email` | `string` | — | Default sender email address. |
+| `domains` | `list(string)` | — | Allowed domains (`ALLOWED_HOSTS`). |
+| `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |
+| `email_file_path` | `string` | `""` | File path for file-based email backend. |
+| `email_host` | `string` | `""` | SMTP host. |
+| `email_host_password` | `string` | `""` | SMTP password (sensitive). |
+| `email_host_user` | `string` | `""` | SMTP username. |
+| `email_port` | `number` | `465` | SMTP port. |
+| `email_subject_prefix` | `string` | — | Email subject prefix. |
+| `email_use_ssl` | `bool` | `true` | Use SSL for SMTP. |
+| `email_use_tls` | `bool` | `false` | Use TLS for SMTP. |
+| `managers` | `list(string)` | `[]` | Django `MANAGERS` setting. |
+| `redis_image_name` | `string` | `"redis:latest"` | [Redis](https://hub.docker.com/_/redis/tags) Docker image name. |
+| `redis_uid` | `number` | `999` | UID of the user running the broker container and owning the data. |
+| `redis_gid` | `number` | `999` | GID of the user running the broker container and owning the data. |
+| `postgresql_image_name` | `string` | `"postgres:latest"` | [PostgreSQL](https://hub.docker.com/_/postgres/tags) Docker image name. |
+| `postgresql_uid` | `number` | `999` | UID of the user running the database container and owning the data. |
+| `postgresql_gid` | `number` | `0` | GID of the user running the database container and owning the data. |
+| `postgresql_max_connections` | `number` | `100` | PostgreSQL max connections. |
+| `nginx_image_name` | `string` | `"nginx:latest"` | [Nginx](https://hub.docker.com/_/nginx/tags) Docker image name. |
+| `nginx_uid` | `number` | `0` | UID of the user running the reverse-proxy container. Non-zero automatically adds `NET_BIND_SERVICE`. |
+| `nginx_gid` | `number` | `0` | GID of the user running the reverse-proxy container. |
+| `nginx_log_level` | `string` | `"warn"` | Nginx error log level. |
+| `nginx_modules` | `list(string)` | `[]` | Extra Nginx modules to load. |
+| `with_spa` | `bool` | `false` | Serve a bundled React SPA from Nginx (`try_files` fallback to `index.html`). |
+| `web` | `object` | — | Web container settings (`concurrency`, `log_level`). |
+| `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
+| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`). |
+
+## Requirements
+
+* Terraform >= 1.6
+* [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 3.0.2
+* [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
+* [hashicorp/random](https://github.com/hashicorp/terraform-provider-random) >= 3.6.0
+
 ## Actions
 
-Examples are based on the following configuration (application called `myapp`) :
+Examples are based on the following configuration (application called `myapp`):
 
 ### Generate static files
 
