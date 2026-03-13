@@ -1,5 +1,16 @@
 # Changelog
 
+## Release v1.1.1 (2026-03-13)
+
+### Features
+
+* Add variable `wait` (default to `false`)
+
+### Fix and enhancements
+
+* Upgrade `postgresql` module version to 1.2.1
+* Reorder variables to be consistent
+
 ## Release v1.1.0 (2026-03-13)
 
 ### Minor compatibility breaks
