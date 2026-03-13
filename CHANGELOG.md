@@ -1,5 +1,11 @@
 # Changelog
 
+## Release v1.1.2 (2026-03-13)
+
+### Fix and enhancements
+
+* Upgrade `nginx` module to 1.1.2
+
 ## Release v1.1.1 (2026-03-13)
 
 ### Features
