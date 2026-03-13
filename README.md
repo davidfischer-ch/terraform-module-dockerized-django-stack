@@ -24,7 +24,6 @@ module "myapp" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.1.0"
 
   identifier     = "myapp"
-  enabled        = true
   data_directory = "/data/myapp"
 
   # Networking
@@ -34,24 +33,20 @@ module "myapp" {
 
   # Reverse Proxy
 
-  ssl_crt       = join("", [acme_certificate.myapp.certificate_pem, acme_certificate.myapp.issuer_pem])
-  ssl_key       = acme_certificate.myapp.private_key_pem
-  max_body_size = "20M"
+  ssl_crt = join("", [acme_certificate.myapp.certificate_pem, acme_certificate.myapp.issuer_pem])
+  ssl_key = acme_certificate.myapp.private_key_pem
 
   # Django Application
 
-  project_name                    = "MyApp"
-  project_app                     = "myapp"
-  site_name                       = "My Application"
-  admin_name                      = "Admin User"
-  admin_email                     = "admin@example.com"
-  csrf_trusted_origins            = ["https://myapp.example.com"]
-  debug                           = false
-  debug_toolbar                   = false
-  debug_toolbar_template_profiler = false
-  default_from_email              = "noreply@example.com"
-  domains                         = ["myapp.example.com"]
-  email_subject_prefix            = "[My Application] "
+  project_name         = "MyApp"
+  project_app          = "myapp"
+  site_name            = "My Application"
+  admin_name           = "Admin User"
+  admin_email          = "admin@example.com"
+  csrf_trusted_origins = ["https://myapp.example.com"]
+  default_from_email   = "noreply@example.com"
+  domains              = ["myapp.example.com"]
+  email_subject_prefix = "[My Application] "
 
   app_image_name        = "your-registry.io/myapp:latest"
   nginx_image_name      = "nginx:1.28.0"
@@ -83,7 +78,6 @@ module "myapp" {
   source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.1.0"
 
   identifier     = "myapp"
-  enabled        = true
   data_directory = pathexpand("~/.apps/myapp")
 
   # Networking
