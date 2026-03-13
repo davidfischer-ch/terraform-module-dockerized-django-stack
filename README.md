@@ -143,8 +143,8 @@ terraform apply
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `identifier` | `string` | — | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
-| `enabled` | `bool` | — | Start or stop the containers. |
-| `wait` | `bool` | `false` | Wait for containers to reach a healthy state after creation (applies to Nginx, PostgreSQL, Redis). |
+| `enabled` | `bool` | `true` | Start or stop the containers. |
+| `wait` | `bool` | `true` | Wait for containers to reach a healthy state after creation (applies to Nginx, PostgreSQL, Redis). |
 | `app_image_name` | `string` | — | Django application Docker image name. |
 | `app_uid` | `number` | `1001` | UID of the user running the application containers and owning the data. |
 | `app_gid` | `number` | `1001` | GID of the user running the application containers and owning the data. |

@@ -9,12 +9,13 @@ variable "identifier" {
 
 variable "enabled" {
   type        = bool
+  default     = true
   description = "Toggle the containers (started or stopped)."
 }
 
 variable "wait" {
   type        = bool
-  default     = false
+  default     = true
   description = <<EOT
     Wait for the containers to reach an healthy state after creation.
     Current restriction: Applies only for Nginx, PostgreSQL and Redis.
