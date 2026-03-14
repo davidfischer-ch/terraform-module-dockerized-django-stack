@@ -4,26 +4,18 @@ resource "docker_image" "nginx" {
 }
 
 module "reverse_proxy" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.2.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.2.1"
 
   identifier = "${var.identifier}-reverse-proxy"
   enabled    = var.enabled
   wait       = var.wait
+  image_id   = docker_image.nginx.image_id
 
-  image_id = docker_image.nginx.image_id
-  app_uid  = var.nginx_uid
-  app_gid  = var.nginx_gid
-  cap_add  = var.nginx_uid == 0 ? [] : ["NET_BIND_SERVICE"]
+  # Process
 
-  data_directory = "${var.data_directory}/reverse-proxy"
-
-  # Logging
-
-  error_log_level = var.nginx_log_level
-
-  # Miscellaneous
-
-  modules = var.nginx_modules
+  app_uid = var.nginx_uid
+  app_gid = var.nginx_gid
+  cap_add = var.nginx_uid == 0 ? [] : ["NET_BIND_SERVICE"]
 
   # Networking
 
@@ -32,11 +24,9 @@ module "reverse_proxy" {
   http_port  = var.http_port
   network_id = docker_network.app.id
 
-  # Security
+  # Storage
 
-  dhparam_use_dsa = var.dhparam_use_dsa
-
-  # Volumes
+  data_directory = "${var.data_directory}/reverse-proxy"
 
   extra_volumes = {
     media = {
@@ -55,6 +45,18 @@ module "reverse_proxy" {
       read_only      = true
     }
   }
+
+  # Logging
+
+  error_log_level = var.nginx_log_level
+
+  # Miscellaneous
+
+  modules = var.nginx_modules
+
+  # Security
+
+  dhparam_use_dsa = var.dhparam_use_dsa
 
   # Sites
 

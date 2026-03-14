@@ -9,21 +9,32 @@ resource "random_password" "broker" {
 }
 
 module "broker" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-redis.git?ref=1.1.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-redis.git?ref=1.2.0"
 
   identifier = "${var.identifier}-broker"
   enabled    = var.enabled
   wait       = var.wait
+  image_id   = docker_image.redis.image_id
 
-  image_id = docker_image.redis.image_id
-  app_uid  = var.redis_uid
-  app_gid  = var.redis_gid
+  # Process
 
-  data_directory = "${var.data_directory}/broker"
+  app_uid = var.redis_uid
+  app_gid = var.redis_gid
+
+  # Networking
 
   hosts      = var.hosts
   network_id = docker_network.app.id
 
+  # Storage
+
+  data_directory = "${var.data_directory}/broker"
+
+  # Configuration
+
   databases = 2
-  password  = random_password.broker.result
+
+  # Authentication
+
+  password = random_password.broker.result
 }
