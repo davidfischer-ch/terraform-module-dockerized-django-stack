@@ -84,7 +84,11 @@ module "reverse_proxy" {
 
       max_body_size = var.max_body_size
       debug         = var.debug
-      with_spa      = var.with_spa
+
+      admin_url = var.admin_url
+
+      with_spa     = var.with_spa
+      django_paths = coalesce(var.django_paths, [])
     }
   }
 }

@@ -36,12 +36,12 @@ server {
 
     client_max_body_size 0;
 
-    # Logging --------------------------------------------------------------------------------------
+    # ── Logging ───────────────────────────────────────────────────────────────────────────────────
 
     access_log /var/log/nginx/{{ name }}/access.log combined if=$condition;
     error_log  /var/log/nginx/{{ name }}/error.log  {{ error_log_level }};
 
-    # Locations ------------------------------------------------------------------------------------
+    # ── Locations ─────────────────────────────────────────────────────────────────────────────────
 
     location /robots.txt {
         alias {{ static_directory }}/{{ project_app }}/robots.txt;
@@ -77,8 +77,8 @@ server {
     }
 
     {% if with_spa %}
-    # ── Django backend paths ───────────────────────────────────────────────────
-    location ~ ^/(api|account|admin|i18n|avatar|en|fr)(/|$) {
+    # ── Django backend paths ──────────────────────────────────────────────────────────────────────
+    location ~ ^/({{ ([admin_url, 'api'] + django_paths) | join('|') }})(/|$) {
         client_max_body_size {{ max_body_size }};
 
         proxy_set_header Host $http_host;
@@ -89,7 +89,7 @@ server {
         proxy_pass       http://app_process;
     }
 
-    # ── Vite hashed assets — immutable cache (content-hashed filenames) ────────
+    # ── Vite hashed assets — immutable cache (content-hashed filenames) ───────────────────────────
     location /assets/ {
         root       {{ static_directory }}/frontend;
         access_log off;
@@ -97,7 +97,7 @@ server {
         add_header Cache-Control "public, immutable";
     }
 
-    # ── React SPA — serve index.html for all React Router paths ───────────────
+    # ── React SPA — serve index.html for all React Router paths ───────────────────────────────────
     location / {
         root      {{ static_directory }}/frontend;
         try_files $uri $uri/ /index.html;
