@@ -4,7 +4,7 @@ resource "docker_image" "app" {
 }
 
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.2.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.3.0"
 
   identifier = var.identifier
   enabled    = var.enabled
@@ -34,14 +34,10 @@ module "app" {
   admin_email = var.admin_email
   admin_url   = var.admin_url
 
-  compress_enabled = var.compress_enabled
-  compress_offline = var.compress_offline
-
   csrf_trusted_origins = var.csrf_trusted_origins
 
-  debug                           = var.debug
-  debug_toolbar                   = var.debug_toolbar
-  debug_toolbar_template_profiler = var.debug_toolbar_template_profiler
+  debug         = var.debug
+  debug_toolbar = var.debug_toolbar
 
   default_from_email = var.default_from_email
 

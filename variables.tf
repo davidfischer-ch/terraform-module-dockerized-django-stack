@@ -156,18 +156,6 @@ variable "admin_url" {
   }
 }
 
-variable "compress_enabled" {
-  type        = bool
-  description = "Enable Django Compressor."
-  default     = false
-}
-
-variable "compress_offline" {
-  type        = bool
-  description = "Enable Django Compressor offline compression."
-  default     = false
-}
-
 variable "csrf_trusted_origins" {
   type        = list(string)
   description = "List of trusted origins for CSRF protection."
@@ -182,12 +170,6 @@ variable "debug" {
 variable "debug_toolbar" {
   type        = bool
   description = "Enable Django Debug Toolbar."
-  default     = false
-}
-
-variable "debug_toolbar_template_profiler" {
-  type        = bool
-  description = "Enable template profiler in Django Debug Toolbar."
   default     = false
 }
 
