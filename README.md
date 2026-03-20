@@ -179,12 +179,9 @@ terraform apply
 | `admin_name` | `string` | — | Admin display name. |
 | `admin_email` | `string` | — | Admin email address. |
 | `admin_url` | `string` | `"admin"` | Admin URL prefix. |
-| `compress_enabled` | `bool` | `false` | Enable Django Compressor. |
-| `compress_offline` | `bool` | `false` | Enable offline compression. |
 | `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
 | `debug` | `bool` | `false` | Enable Django debug mode. |
 | `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
-| `debug_toolbar_template_profiler` | `bool` | `false` | Enable Debug Toolbar template profiler. |
 | `default_from_email` | `string` | — | Default sender email address. |
 | `domains` | `list(string)` | — | Allowed domains (`ALLOWED_HOSTS`). |
 | `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |

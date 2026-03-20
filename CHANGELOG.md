@@ -1,5 +1,22 @@
 # Changelog
 
+## Release v1.3.0 (2026-03-20)
+
+### Minor compatibility breaks
+
+* Require Terraform >= 1.11 (was >= 1.6) — enables cross-variable validation blocks
+* Remove `compress_enabled`, `compress_offline`, `debug_toolbar_template_profiler` variables
+
+### Features
+
+* Add `django_paths` variable — configures extra path prefixes proxied to Django when `with_spa = true` (`/api` and `admin_url` are always included); mandatory when `with_spa = true`
+* Add `app_conf_template` variable — override the built-in `sites/app.conf.j2` with a project-specific Jinja2 template
+
+### Fix and enhancements
+
+* Reorder variables for consistency
+* Upgrade all sub-modules
+
 ## Release v1.2.1 (2026-03-13)
 
 ### Fix and enhancements
