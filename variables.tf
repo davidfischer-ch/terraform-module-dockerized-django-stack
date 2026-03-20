@@ -347,6 +347,15 @@ variable "nginx_modules" {
   default     = []
 }
 
+variable "app_conf_template" {
+  type        = string
+  description = <<EOT
+    Path to a custom Jinja2 nginx site template.
+    Defaults to the built-in sites/app.conf.j2."
+  EOT
+  default     = null
+}
+
 variable "with_spa" {
   type        = bool
   description = "Serve a bundled React SPA from Nginx (try_files fallback to index.html)."

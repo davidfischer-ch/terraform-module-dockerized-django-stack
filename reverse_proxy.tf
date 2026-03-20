@@ -63,7 +63,7 @@ module "reverse_proxy" {
   sites = {
     app = {
       name     = var.identifier
-      path     = "${path.module}/sites/app.conf.j2"
+      path     = coalesce(var.app_conf_template, "${path.module}/sites/app.conf.j2")
       inc_path = module.templates.inc_path
       host     = module.app.host
       port     = module.app.port

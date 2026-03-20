@@ -209,14 +209,16 @@ terraform apply
 | `nginx_gid` | `number` | `0` | GID of the user running the reverse-proxy container. |
 | `nginx_log_level` | `string` | `"warn"` | Nginx error log level. |
 | `nginx_modules` | `list(string)` | `[]` | Extra Nginx modules to load. |
+| `app_conf_template` | `string` | `null` | Path to a custom Jinja2 nginx site template. Defaults to the built-in `sites/app.conf.j2`. |
 | `with_spa` | `bool` | `false` | Serve a bundled React SPA from Nginx (`try_files` fallback to `index.html`). |
+| `django_paths` | `list(string)` | `null` | Additional path prefixes to proxy to Django (besides `/api` and `admin_url`, which are always included). Required when `with_spa = true`. Typical values: `"i18n"`, `"avatar"`, `"en"`, `"fr"`. Use `[]` for a pure SPA with no extra Django paths. |
 | `web` | `object` | — | Web container settings (`concurrency`, `log_level`). |
 | `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
 | `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`). |
 
 ## Requirements
 
-* Terraform >= 1.6
+* Terraform >= 1.11
 * [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 3.0.2
 * [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
 * [hashicorp/random](https://github.com/hashicorp/terraform-provider-random) >= 3.6.0
