@@ -1,5 +1,11 @@
 # Changelog
 
+## Release v1.3.1 (2026-03-21)
+
+### Fix and enhancements
+
+* Upgrade django-app to 1.3.1, nginx to 1.2.2, postgresql to 1.3.1, redis to 1.2.1
+
 ## Release v1.3.0 (2026-03-20)
 
 ### Minor compatibility breaks
