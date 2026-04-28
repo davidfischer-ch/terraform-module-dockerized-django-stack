@@ -23,7 +23,7 @@ terraform {
     # https://github.com/NikolaLohinski/terraform-provider-jinja/tags
     jinja = {
       source  = "NikolaLohinski/jinja"
-      version = ">= 1.17.0"
+      version = ">= 2.0.0"
     }
 
     # https://github.com/hashicorp/terraform-provider-local/tags
