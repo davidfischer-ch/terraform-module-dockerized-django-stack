@@ -1,5 +1,11 @@
 # Changelog
 
+## Release v1.5.0 (2026-04-28)
+
+### Minor compatibility breaks
+
+* Upgrade nginx-templates to 1.1.0; internal nginx now requires TLS 1.2+ and AEAD-only ciphers (see nginx-templates CHANGELOG for full details)
+
 ## Release v1.4.0 (2026-04-28)
 
 ### Minor compatibility breaks
