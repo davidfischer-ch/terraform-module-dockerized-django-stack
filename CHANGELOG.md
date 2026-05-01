@@ -1,5 +1,12 @@
 # Changelog
 
+## Release v1.5.1 (2026-05-01)
+
+### Features
+
+* Add `extra_volumes` variable to mount additional volumes in the web, beat and worker containers
+* Upgrade django-app to 1.3.2
+
 ## Release v1.5.0 (2026-04-28)
 
 ### Minor compatibility breaks
