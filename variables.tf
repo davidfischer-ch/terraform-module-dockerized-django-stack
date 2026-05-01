@@ -107,6 +107,18 @@ variable "data_directory" {
   description = "Where data will be persisted (volumes will be mounted as sub-directories)."
 }
 
+variable "extra_volumes" {
+  type = map(object({
+    container_path = optional(string)
+    from_container = optional(string)
+    host_path      = optional(string)
+    read_only      = optional(bool)
+    volume_name    = optional(string)
+  }))
+  description = "Extra volumes to mount in the web, beat and worker containers."
+  default     = {}
+}
+
 # Django Application -------------------------------------------------------------------------------
 
 variable "project_name" {

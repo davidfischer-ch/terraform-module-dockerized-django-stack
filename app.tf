@@ -4,7 +4,7 @@ resource "docker_image" "app" {
 }
 
 module "app" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.3.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-app.git?ref=1.3.2"
 
   identifier = var.identifier
   enabled    = var.enabled
@@ -23,6 +23,7 @@ module "app" {
   # Storage
 
   data_directory = "${var.data_directory}/app"
+  extra_volumes  = var.extra_volumes
 
   # Django Application
 
