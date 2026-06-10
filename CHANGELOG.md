@@ -1,5 +1,17 @@
 # Changelog
 
+## Release v1.6.0 (2026-06-10)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-django-stack/compare/1.5.1...1.6.0
+
+### Minor compatibility breaks
+
+* `with_spa` sites now proxy all SPA fallback requests to Django (`@django_spa` named location) instead of serving `index.html` directly — requires the Django app to implement a `SPAView` that serves `index.html` with `window.__AUTH__` injected
+
+### Features
+
+* Add nginx regex location to proxy `user-*.js` and `admin-*.js` assets to Django for per-tier auth enforcement (three-tier frontend delivery)
+
 ## Release v1.5.1 (2026-05-01)
 
 ### Features
