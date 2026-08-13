@@ -76,6 +76,10 @@ module "reverse_proxy" {
       ssl_crt      = var.ssl_crt
       ssl_key      = var.ssl_key
 
+      # The front door reaches this container through Docker's own network; its connections are
+      # seen here as coming from the `app` network's gateway rather than the real client IP.
+      real_ip_from = one([for c in docker_network.app.ipam_config : c.subnet if c.subnet != ""])
+
       project_app = var.project_app
 
       media_directory     = "/data/media"

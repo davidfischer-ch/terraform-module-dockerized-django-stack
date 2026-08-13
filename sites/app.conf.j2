@@ -27,6 +27,7 @@ server {
     {% endif %}
 
     {% include inc_path ~ 'site.security-headers.conf.j2' %}
+    {% include inc_path ~ 'site.real_ip.conf.j2' %}
 
     server_name {{ domains|join(' ') }};
 
