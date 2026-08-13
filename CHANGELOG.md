@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v1.6.1 (2026-08-13)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.0...1.6.1
+
+### Features
+
+* Trust the `app` Docker network on the app-level nginx reverse proxy (`real_ip_from`) so `$remote_addr` reflects the real client IP instead of the network gateway address
+
 ## Release v1.6.0 (2026-06-10)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-django-stack/compare/1.5.1...1.6.0
