@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v1.6.3 (2026-09-04)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.2...1.6.3
+
+### Features
+
+* Upgrade `django-app` to 1.3.4, giving a `workers` entry its own `security_opt`
+
 ## Release v1.6.2 (2026-09-04)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.1...1.6.2
