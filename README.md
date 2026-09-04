@@ -76,6 +76,19 @@ module "myapp" {
   beat    = { log_level = "info" }
   workers = {
     default = { name = "default", queues = ["default"], log_level = "info" }
+
+    # A worker whose tasks drive hardware takes what it needs alone, rather than the stack taking it
+    # on every container. Bluetooth over BlueZ wants the system bus and NET_ADMIN.
+    domotic = {
+      name          = "domotic"
+      queues        = ["domotic"]
+      log_level     = "info"
+      extra_options = ["--concurrency", "1"]
+      cap_add       = ["NET_ADMIN"]
+      extra_volumes = {
+        dbus = { container_path = "/run/dbus", host_path = "/run/dbus", read_only = false }
+      }
+    }
   }
 }
 ```
@@ -211,7 +224,7 @@ terraform apply
 | `django_paths` | `list(string)` | `null` | Additional path prefixes to proxy to Django (besides `/api` and `admin_url`, which are always included). Required when `with_spa = true`. Typical values: `"i18n"`, `"avatar"`, `"en"`, `"fr"`. Use `[]` for a pure SPA with no extra Django paths. |
 | `web` | `object` | — | Web container settings (`concurrency`, `log_level`). |
 | `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
-| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`). |
+| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`, `cap_add`, `extra_volumes`). The last two are granted to that worker alone, on top of the stack-wide ones. |
 
 ## Requirements
 
