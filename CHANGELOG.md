@@ -1,5 +1,13 @@
 # Changelog
 
+## Release v1.6.2 (2026-09-04)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.1...1.6.2
+
+### Features
+
+* Upgrade `django-app` to 1.3.3, giving a `workers` entry its own `cap_add` and `extra_volumes`
+
 ## Release v1.6.1 (2026-08-13)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.0...1.6.1
