@@ -1,5 +1,23 @@
 # Changelog
 
+## Release v1.6.4 (2026-10-25)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.3...1.6.4
+
+### Features
+
+Beat:
+
+* Upgrade `django-app` to 1.3.5, giving `beat` an optional `heartbeat`
+    * Healthcheck beat on the age of a file in the workers directory
+    * Label beat `autoheal=true` for autoheal to restart it once the file goes stale
+
+### Fix and enhancements
+
+Docs:
+
+* Point the `web`, `beat` and `workers` rows of the variables table to django-app's README sections
+
 ## Release v1.6.3 (2026-09-04)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.2...1.6.3
