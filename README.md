@@ -223,9 +223,9 @@ terraform apply
 | `app_conf_template` | `string` | `null` | Path to a custom Jinja2 nginx site template. Defaults to the built-in `sites/app.conf.j2`. |
 | `with_spa` | `bool` | `false` | Serve a bundled React SPA from Nginx (`try_files` fallback to `index.html`). |
 | `django_paths` | `list(string)` | `null` | Additional path prefixes to proxy to Django (besides `/api` and `admin_url`, which are always included). Required when `with_spa = true`. Typical values: `"i18n"`, `"avatar"`, `"en"`, `"fr"`. Use `[]` for a pure SPA with no extra Django paths. |
-| `web` | `object` | — | Web container settings (`concurrency`, `log_level`). |
-| `beat` | `object` | — | Celery beat settings (`log_level`, `extra_options`). |
-| `workers` | `map(object)` | — | Celery workers settings (`name`, `queues`, `log_level`, `extra_options`, `cap_add`, `security_opt`, `extra_volumes`). The last three are granted to that worker alone, on top of the stack-wide ones. |
+| `web` | `object` | — | Web container settings, see django-app's [Web](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#web). |
+| `beat` | `object` | — | Celery beat settings, see django-app's [Beat](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#beat). |
+| `workers` | `map(object)` | — | Celery workers settings, see django-app's [Workers](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#workers). |
 
 ## Requirements
 
