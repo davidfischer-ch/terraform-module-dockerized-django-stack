@@ -123,7 +123,7 @@ module "myapp" {
 
   # ...
 
-  # Process — run all containers as the current host user
+  # Process: run all containers as the current host user
 
   app_uid        = tonumber(data.external.current_user.result.uid)
   app_gid        = tonumber(data.external.current_user.result.gid)
@@ -172,39 +172,39 @@ terraform apply
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| `identifier` | `string` | — | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
+| `identifier` | `string` | required | Unique name for resources (must match `^[a-z]+(-[a-z0-9]+)*$`). |
 | `enabled` | `bool` | `true` | Start or stop the containers. |
 | `wait` | `bool` | `true` | Wait for containers to reach a healthy state after creation (applies to Nginx, PostgreSQL, Redis). |
-| `app_image_name` | `string` | — | Django application Docker image name. |
+| `app_image_name` | `string` | required | Django application Docker image name. |
 | `app_uid` | `number` | `1001` | UID of the user running the application containers and owning the data. |
 | `app_gid` | `number` | `1001` | GID of the user running the application containers and owning the data. |
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the containers. |
-| `https_port` | `number` | — | Bind the reverse proxy's HTTPS port. |
-| `http_port` | `number` | — | Bind the reverse proxy's HTTP port. |
+| `https_port` | `number` | required | Bind the reverse proxy's HTTPS port. |
+| `http_port` | `number` | required | Bind the reverse proxy's HTTP port. |
 | `dhparam_use_dsa` | `bool` | `false` | Use DSA instead of DH params (faster to generate but weaker). |
-| `ssl_crt` | `string` | — | SSL certificate (PEM). |
-| `ssl_key` | `string` | — | SSL private key (PEM, sensitive). |
+| `ssl_crt` | `string` | required | SSL certificate (PEM). |
+| `ssl_key` | `string` | required | SSL private key (PEM, sensitive). |
 | `max_body_size` | `string` | `"20M"` | Nginx client max body size. |
-| `data_directory` | `string` | — | Host path for persistent volumes. |
-| `project_name` | `string` | — | Django project directory name (e.g. `MyApp`). |
-| `project_app` | `string` | — | Django project's main application name (e.g. `myapp`). |
-| `site_name` | `string` | — | Django site display name. |
+| `data_directory` | `string` | required | Host path for persistent volumes. |
+| `project_name` | `string` | required | Django project directory name (e.g. `MyApp`). |
+| `project_app` | `string` | required | Django project's main application name (e.g. `myapp`). |
+| `site_name` | `string` | required | Django site display name. |
 | `settings` | `map(string)` | `{}` | Additional environment variables for the application. |
-| `admin_name` | `string` | — | Admin display name. |
-| `admin_email` | `string` | — | Admin email address. |
+| `admin_name` | `string` | required | Admin display name. |
+| `admin_email` | `string` | required | Admin email address. |
 | `admin_url` | `string` | `"admin"` | Admin URL prefix. |
-| `csrf_trusted_origins` | `list(string)` | — | CSRF trusted origins. |
+| `csrf_trusted_origins` | `list(string)` | required | CSRF trusted origins. |
 | `debug` | `bool` | `false` | Enable Django debug mode. |
 | `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
-| `default_from_email` | `string` | — | Default sender email address. |
-| `domains` | `list(string)` | — | Allowed domains (`ALLOWED_HOSTS`). |
+| `default_from_email` | `string` | required | Default sender email address. |
+| `domains` | `list(string)` | required | Allowed domains (`ALLOWED_HOSTS`). |
 | `email_backend` | `string` | `"django.core.mail.backends.dummy.EmailBackend"` | Email backend class. |
 | `email_file_path` | `string` | `""` | File path for file-based email backend. |
 | `email_host` | `string` | `""` | SMTP host. |
 | `email_host_password` | `string` | `""` | SMTP password (sensitive). |
 | `email_host_user` | `string` | `""` | SMTP username. |
 | `email_port` | `number` | `465` | SMTP port. |
-| `email_subject_prefix` | `string` | — | Email subject prefix. |
+| `email_subject_prefix` | `string` | required | Email subject prefix. |
 | `email_use_ssl` | `bool` | `true` | Use SSL for SMTP. |
 | `email_use_tls` | `bool` | `false` | Use TLS for SMTP. |
 | `managers` | `list(string)` | `[]` | Django `MANAGERS` setting. |
@@ -223,9 +223,9 @@ terraform apply
 | `app_conf_template` | `string` | `null` | Path to a custom Jinja2 nginx site template. Defaults to the built-in `sites/app.conf.j2`. |
 | `with_spa` | `bool` | `false` | Serve a bundled React SPA from Nginx (`try_files` fallback to `index.html`). |
 | `django_paths` | `list(string)` | `null` | Additional path prefixes to proxy to Django (besides `/api` and `admin_url`, which are always included). Required when `with_spa = true`. Typical values: `"i18n"`, `"avatar"`, `"en"`, `"fr"`. Use `[]` for a pure SPA with no extra Django paths. |
-| `web` | `object` | — | Web container settings, see django-app's [Web](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#web). |
-| `beat` | `object` | — | Celery beat settings, see django-app's [Beat](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#beat). |
-| `workers` | `map(object)` | — | Celery workers settings, see django-app's [Workers](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#workers). |
+| `web` | `object` | required | Web container settings, see django-app's [Web](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#web). |
+| `beat` | `object` | required | Celery beat settings, see django-app's [Beat](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#beat). |
+| `workers` | `map(object)` | required | Celery workers settings, see django-app's [Workers](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#workers). |
 
 ## Requirements
 
