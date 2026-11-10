@@ -179,8 +179,9 @@ terraform apply
 | `app_uid` | `number` | `1001` | UID of the user running the application containers and owning the data. |
 | `app_gid` | `number` | `1001` | GID of the user running the application containers and owning the data. |
 | `hosts` | `map(string)` | `{}` | Extra `/etc/hosts` entries for the containers. |
-| `https_port` | `number` | required | Bind the reverse proxy's HTTPS port. |
-| `http_port` | `number` | required | Bind the reverse proxy's HTTP port. |
+| `listener_address` | `string` | `"127.0.0.1"` | Address the reverse proxy's published ports bind to. |
+| `https_port` | `number` | required | Reverse proxy HTTPS port, `null` for none. |
+| `http_port` | `number` | required | Reverse proxy HTTP port, `null` for none. |
 | `dhparam_use_dsa` | `bool` | `false` | Use DSA instead of DH params (faster to generate but weaker). |
 | `ssl_crt` | `string` | required | SSL certificate (PEM). |
 | `ssl_key` | `string` | required | SSL private key (PEM, sensitive). |

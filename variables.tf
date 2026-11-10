@@ -50,23 +50,38 @@ variable "hosts" {
   default     = {}
 }
 
+variable "listener_address" {
+  type        = string
+  description = <<-EOT
+    Address the reverse proxy's published ports bind to. `0.0.0.0` offers them to every network the
+    host is on.
+  EOT
+  default     = "127.0.0.1"
+}
+
 variable "https_port" {
   type        = number
-  description = "Bind the reverse proxy's HTTPS port."
+  description = "Bind the reverse proxy's HTTPS port, or publish none with `null`."
+  nullable    = true
 
   validation {
-    condition     = var.https_port >= 1 && var.https_port <= 65535
-    error_message = "Argument `https_port` must be between 1 and 65535."
+    condition = (
+      var.https_port == null ? true : var.https_port >= 1 && var.https_port <= 65535
+    )
+    error_message = "Argument `https_port` must be between 1 and 65535, or null."
   }
 }
 
 variable "http_port" {
   type        = number
-  description = "Bind the reverse proxy's HTTP port."
+  description = "Bind the reverse proxy's HTTP port, or publish none with `null`."
+  nullable    = true
 
   validation {
-    condition     = var.http_port >= 1 && var.http_port <= 65535
-    error_message = "Argument `http_port` must be between 1 and 65535."
+    condition = (
+      var.http_port == null ? true : var.http_port >= 1 && var.http_port <= 65535
+    )
+    error_message = "Argument `http_port` must be between 1 and 65535, or null."
   }
 }
 
