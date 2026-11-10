@@ -1,5 +1,28 @@
 # Changelog
 
+## Release v1.7.0 (2026-11-10)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.4...1.7.0
+
+### Minor compatibility breaks
+
+Reverse Proxy:
+
+* Publish the reverse proxy's ports on `listener_address`, `127.0.0.1` by default instead of `0.0.0.0`
+    * Set `listener_address = "0.0.0.0"` to keep them reachable from every network
+
+### Features
+
+Reverse Proxy:
+
+* Allow `https_port` and `http_port` to be `null`, to publish no port
+
+### Fix and enhancements
+
+Reverse Proxy:
+
+* Upgrade `nginx` module to 1.5.0
+
 ## Release v1.6.4 (2026-10-25)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.3...1.6.4
