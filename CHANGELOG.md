@@ -1,5 +1,15 @@
 # Changelog
 
+## Release v1.7.1 (2026-11-10)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.0...1.7.1
+
+### Features
+
+Reverse Proxy:
+
+* Add `websocket` to upgrade a path prefix to WebSocket, with its idle `read_timeout`
+
 ## Release v1.7.0 (2026-11-10)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.6.4...1.7.0
