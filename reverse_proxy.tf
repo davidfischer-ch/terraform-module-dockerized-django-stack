@@ -88,6 +88,7 @@ module "reverse_proxy" {
       static_directory    = "/data/static"
 
       max_body_size = var.max_body_size
+      websocket     = var.websocket
       debug         = var.debug
 
       admin_url = var.admin_url

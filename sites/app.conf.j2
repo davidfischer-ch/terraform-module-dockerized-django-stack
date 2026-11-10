@@ -77,6 +77,20 @@ server {
         alias {{ protected_directory }}/;
     }
 
+    {% if websocket %}
+    # ── WebSockets, upgraded and held open ────────────────────────────────────────────────────────
+    location ^~ {{ websocket.path }} {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_http_version 1.1;
+        proxy_read_timeout {{ websocket.read_timeout }};
+        proxy_pass       http://app_process;
+    }
+
+    {% endif %}
     {% if with_spa %}
     # ── Django backend paths ──────────────────────────────────────────────────────────────────────
     location ~ ^/({{ ([admin_url, 'api'] + django_paths) | join('|') }})(/|$) {

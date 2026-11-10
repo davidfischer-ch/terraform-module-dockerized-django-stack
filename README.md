@@ -186,6 +186,7 @@ terraform apply
 | `ssl_crt` | `string` | required | SSL certificate (PEM). |
 | `ssl_key` | `string` | required | SSL private key (PEM, sensitive). |
 | `max_body_size` | `string` | `"20M"` | Nginx client max body size. |
+| `websocket` | `object({ path = string, read_timeout = optional(string, "1h") })` | `null` | Path prefix upgraded to WebSocket, and its idle timeout; `null` for none. |
 | `data_directory` | `string` | required | Host path for persistent volumes. |
 | `project_name` | `string` | required | Django project directory name (e.g. `MyApp`). |
 | `project_app` | `string` | required | Django project's main application name (e.g. `myapp`). |

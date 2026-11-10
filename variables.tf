@@ -115,6 +115,18 @@ variable "max_body_size" {
   default     = "20M"
 }
 
+variable "websocket" {
+  type = object({
+    path         = string
+    read_timeout = optional(string, "1h")
+  })
+  description = <<-EOT
+    Path prefix the reverse proxy upgrades to WebSocket for the app (`path`, e.g. `/ws/`), and how
+    long a connection may stay silent (`read_timeout`). `null` proxies no WebSocket.
+  EOT
+  default     = null
+}
+
 # Storage ------------------------------------------------------------------------------------------
 
 variable "data_directory" {
