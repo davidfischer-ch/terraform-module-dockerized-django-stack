@@ -1,5 +1,15 @@
 # Changelog
 
+## Release v1.7.2 (2026-11-14)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.1...1.7.2
+
+### Fix and enhancements
+
+Workers:
+
+* Upgrade `django-app` to 1.3.6, running each worker under an init that reaps the processes its tasks orphan
+
 ## Release v1.7.1 (2026-11-10)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.0...1.7.1
