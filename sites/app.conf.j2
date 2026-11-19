@@ -106,7 +106,7 @@ server {
         proxy_pass       http://app_process;
     }
 
-    # ── Protected JS chunks: user/admin tiers require auth — proxied to Django ──────────────────────
+    # ── Protected JS chunks: user/admin tiers require auth — proxied to Django ────────────────────
     location ~ ^/assets/(user|admin)-[^/]+\.js$ {
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -116,12 +116,11 @@ server {
         proxy_pass       http://app_process;
     }
 
-    # ── Public Vite assets — immutable cache (content-hashed filenames) ───────────────────────────
+    # ── Public Vite assets — cached as long as possible (content-hashed filenames) ────────────────
     location /assets/ {
         root       {{ static_directory }}/frontend;
         access_log off;
         expires    max;
-        add_header Cache-Control "public, immutable";
     }
 
     # ── React SPA — all non-static paths proxied to Django SPAView for window.__AUTH__ injection ──
@@ -129,7 +128,6 @@ server {
         root      {{ static_directory }}/frontend;
         try_files $uri @django_spa;
         expires   -1;
-        add_header Cache-Control "no-cache, no-store, must-revalidate";
     }
     location @django_spa {
         proxy_set_header Host $http_host;
