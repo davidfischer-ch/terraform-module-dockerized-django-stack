@@ -3,11 +3,13 @@
 Manage a "standardized" Django application's stack.
 
 * Runs all components on a dedicated bridge network
-* Creates a web container (Uvicorn ASGI), a Celery beat scheduler, and Celery workers, via the `django-app` sub-module
+* Creates a web container (Uvicorn ASGI), a Celery beat scheduler, and Celery workers, via the
+  `django-app` sub-module
 * Provisions a PostgreSQL database, a Redis broker/cache, and an Nginx reverse proxy
 * Supports sudoless local development by running all containers as the current host user
 
 [TOC]
+
 
 ## Examples
 
@@ -138,6 +140,7 @@ module "myapp" {
 }
 ```
 
+
 ## Data layout
 
 All persistent data lives under `data_directory`:
@@ -155,6 +158,7 @@ data_directory/
 └── reverse-proxy/  # Nginx configuration, certificates, dhparam
 ```
 
+
 ## Passwords
 
 The Redis broker and PostgreSQL database passwords are **generated automatically** by Terraform
@@ -167,6 +171,7 @@ terraform taint 'module.myapp.random_password.broker'
 terraform taint 'module.myapp.random_password.database'
 terraform apply
 ```
+
 
 ## Variables
 
@@ -228,6 +233,7 @@ terraform apply
 | `web` | `object` | required | Web container settings, see django-app's [Web](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#web). |
 | `beat` | `object` | required | Celery beat settings, see django-app's [Beat](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#beat). |
 | `workers` | `map(object)` | required | Celery workers settings, see django-app's [Workers](https://github.com/davidfischer-ch/terraform-module-dockerized-django-app#workers). |
+
 
 ## Requirements
 

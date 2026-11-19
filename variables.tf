@@ -406,14 +406,17 @@ variable "django_paths" {
   description = <<EOT
     Additional path prefixes to proxy to the Django backend. Only used when `with_spa = true`.
     `/api` and `admin_url` are always proxied automatically and must not be listed here.
-    Typical values: "i18n" (JavaScriptCatalog), "avatar", "en", "fr" (i18n_patterns language prefixes).
-    Pure SPA projects with no Django-template views can pass an empty list.
+    Typical values: "i18n" (JavaScriptCatalog), "avatar", "en", "fr" (i18n_patterns language
+    prefixes). Pure SPA projects with no Django-template views can pass an empty list.
   EOT
   default     = null
 
   validation {
-    condition     = !var.with_spa || var.django_paths != null
-    error_message = "django_paths must be set explicitly when with_spa = true (use [] for a pure SPA with no extra Django paths)."
+    condition = !var.with_spa || var.django_paths != null
+    error_message = join(" ", [
+      "django_paths must be set explicitly when with_spa = true",
+      "(use [] for a pure SPA with no extra Django paths).",
+    ])
   }
 }
 
