@@ -201,7 +201,7 @@ terraform apply
 | `admin_email` | `string` | required | Admin email address. |
 | `admin_url` | `string` | `"admin"` | Admin URL prefix. |
 | `csrf_trusted_origins` | `list(string)` | required | CSRF trusted origins. |
-| `debug` | `bool` | `false` | Enable Django debug mode. |
+| `debug` | `bool` | `false` | Enable Django debug mode, and the reverse proxy's listings of `/static/` and `/media/`. |
 | `debug_toolbar` | `bool` | `false` | Enable Django Debug Toolbar. |
 | `default_from_email` | `string` | required | Default sender email address. |
 | `domains` | `list(string)` | required | Allowed domains (`ALLOWED_HOSTS`). |
@@ -241,6 +241,22 @@ terraform apply
 * [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 4.7.0
 * [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
 * [hashicorp/random](https://github.com/hashicorp/terraform-provider-random) >= 3.6.0
+
+
+## Tests
+
+```bash
+terraform init -backend=false
+terraform test
+```
+
+The tests render the reverse proxy's site template (`sites/app.conf.j2`) through the Jinja provider,
+with the templates module `terraform init` installs, and assert on the configuration it gives
+(Terraform >= 1.17, the module's own floor). They do not run nginx, which applies that configuration
+(request size limits, response headers, name resolution), nor the stack's containers. They run on
+every push, in the GitHub workflow (with the newest providers and with their minimums) and in the
+GitLab pipeline.
+
 
 ## Actions
 

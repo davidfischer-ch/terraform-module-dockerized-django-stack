@@ -202,7 +202,7 @@ variable "csrf_trusted_origins" {
 
 variable "debug" {
   type        = bool
-  description = "Enable Django debug mode."
+  description = "Enable Django debug mode, and the directory listings of `/static/` and `/media/`."
   default     = false
 }
 

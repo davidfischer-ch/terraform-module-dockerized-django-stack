@@ -54,7 +54,9 @@ server {
 
     location /static/ {
         access_log off;
+        {% if debug %}
         autoindex  on;
+        {% endif %}
         {% if not debug %}
         expires    max;
         {% endif %}
@@ -65,7 +67,9 @@ server {
 
     location /media/ {
         access_log off;
+        {% if debug %}
         autoindex  on;
+        {% endif %}
         sendfile   off;  # Avoid Nginx serving outdated static files
 
         alias {{ media_directory }}/;
