@@ -1,7 +1,3 @@
-upstream app_process {
-    server {{ host }}:{{ port|int }};
-}
-
 server {
     # Security - http://nginx.org/en/docs/http/request_processing.html
     listen {{ http_internal_port|int }};
@@ -36,6 +32,11 @@ server {
     gzip_types application/javascript application/json text/css text/javascript text/xml;
 
     client_max_body_size {{ max_body_size }};
+
+    # Docker's DNS, its responses cached 10 s: proxied through a variable, the web container's name
+    # is resolved per request, which reaches a recreated container at its new address.
+    resolver 127.0.0.11 valid=10s;
+    set $app_upstream http://{{ host }}:{{ port|int }};
 
     # ── Logging ───────────────────────────────────────────────────────────────────────────────────
 
@@ -91,7 +92,7 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_http_version 1.1;
         proxy_read_timeout {{ websocket.read_timeout }};
-        proxy_pass       http://app_process;
+        proxy_pass       $app_upstream;
     }
 
     {% endif %}
@@ -103,7 +104,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect   off;
         proxy_buffering  off;
-        proxy_pass       http://app_process;
+        proxy_pass       $app_upstream;
     }
 
     # ── Protected JS chunks: user/admin tiers require auth — proxied to Django ────────────────────
@@ -113,7 +114,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect   off;
         proxy_buffering  off;
-        proxy_pass       http://app_process;
+        proxy_pass       $app_upstream;
     }
 
     # ── Public Vite assets — cached as long as possible (content-hashed filenames) ────────────────
@@ -135,7 +136,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect   off;
         proxy_buffering  off;
-        proxy_pass       http://app_process;
+        proxy_pass       $app_upstream;
     }
     {% else %}
     location / {
@@ -148,7 +149,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_redirect   off;
         proxy_buffering  off;
-        proxy_pass       http://app_process;
+        proxy_pass       $app_upstream;
     }
     {% endif %}
 }
