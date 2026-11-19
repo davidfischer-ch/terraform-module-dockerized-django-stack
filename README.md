@@ -262,19 +262,18 @@ GitLab pipeline.
 
 Examples are based on the following configuration (application called `myapp`):
 
-### Generate static files
+### Migrate the database and collect the static files
 
-```
-sudo docker exec -it myapp-web python manage.py collectstatic
+The application module's actions run `manage.py` in the web container, as the containers' user,
+after deploying an image:
+
+```bash
+terraform apply -invoke='module.myapp.module.app.action.docker_exec.migrate'
+terraform apply -invoke='module.myapp.module.app.action.docker_exec.collectstatic'
 ```
 
-Files will be generated under `/data/myapp/app/static/` directory.
-
-### Migrate database
-
-```
-sudo docker exec -it myapp-web python manage.py migrate
-```
+`collectstatic` writes into `/data/myapp/app/static`. Replace `module.myapp` with the stack's
+address.
 
 ### Backup and restore database
 
