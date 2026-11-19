@@ -1,5 +1,57 @@
 # Changelog
 
+
+## Release v1.8.0 (2026-11-19)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.2...1.8.0
+
+### Minor compatibility breaks
+
+Reverse Proxy:
+
+* Cap the request body at `max_body_size` on every path, WebSocket and SPA fallback included, which accepted any size
+* List `/static/` and `/media/` only with `debug`
+
+### Features
+
+Application:
+
+* Upgrade `django-app` to 1.3.7, its `migrate` and `collectstatic` actions replacing the README's `docker exec` steps
+    * Uvicorn trusts the forwarded headers of the stack's network: Django sees the client's address and scheme
+    * `settings.env` readable by the containers' user alone
+    * The web, beat and worker containers are replaced once on upgrade
+
+Database:
+
+* Upgrade `postgresql` to 1.3.6, its backup, restore and maintenance actions documented in the README
+    * The database container is replaced once on upgrade, to mount `{data_directory}/database/backup`
+
+CI:
+
+* Add CI: formatting, validation and the tests, in the GitHub workflow (with the newest providers and their minimums) and in the GitLab pipeline
+
+### Fix and enhancements
+
+Reverse Proxy:
+
+* Reach a recreated web container, its name resolved per request through Docker's DNS
+* Give the SPA's assets and fallback the server's security headers back
+* Upgrade `nginx` to 1.6.1, with a healthcheck the stack's `wait` uses
+
+Broker:
+
+* Upgrade `redis` to 1.3.1, its password out of the process list and `redis.conf` readable by its user alone
+
+Requirements:
+
+* Require Terraform 1.17
+* Require the Docker provider 4.7.0
+
+Docs:
+
+* Point the README and the examples at this release
+
+
 ## Release v1.7.2 (2026-11-14)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.1...1.7.2

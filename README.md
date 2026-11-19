@@ -23,7 +23,7 @@ privileges to provision services and change files ownership.
 
 ```hcl
 module "myapp" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.2.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.8.0"
 
   identifier = "myapp"
 
@@ -110,7 +110,7 @@ data "external" "current_user" {
 }
 
 module "myapp" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.2.0"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack.git?ref=1.8.0"
 
   identifier = "myapp"
 
