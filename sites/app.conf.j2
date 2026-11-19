@@ -35,7 +35,7 @@ server {
     gzip_proxied any;
     gzip_types application/javascript application/json text/css text/javascript text/xml;
 
-    client_max_body_size 0;
+    client_max_body_size {{ max_body_size }};
 
     # ── Logging ───────────────────────────────────────────────────────────────────────────────────
 
@@ -98,8 +98,6 @@ server {
     {% if with_spa %}
     # ── Django backend paths ──────────────────────────────────────────────────────────────────────
     location ~ ^/({{ ([admin_url, 'api'] + django_paths) | join('|') }})(/|$) {
-        client_max_body_size {{ max_body_size }};
-
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -146,8 +144,6 @@ server {
         # Security - http://breachattack.com/resources/BREACH%20-%20SSL,%20gone%20in%2030%20seconds.pdf
         # length_hiding on;
         # length_hiding_max 512;
-
-        client_max_body_size {{ max_body_size }};
 
         proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

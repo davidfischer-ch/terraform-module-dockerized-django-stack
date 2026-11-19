@@ -190,7 +190,7 @@ terraform apply
 | `dhparam_use_dsa` | `bool` | `false` | Use DSA instead of DH params (faster to generate but weaker). |
 | `ssl_crt` | `string` | required | SSL certificate (PEM). |
 | `ssl_key` | `string` | required | SSL private key (PEM, sensitive). |
-| `max_body_size` | `string` | `"20M"` | Nginx client max body size. |
+| `max_body_size` | `string` | `"20M"` | Largest request body the reverse proxy accepts, on every path. |
 | `websocket` | `object({ path = string, read_timeout = optional(string, "1h") })` | `null` | Path prefix upgraded to WebSocket, and its idle timeout; `null` for none. |
 | `data_directory` | `string` | required | Host path for persistent volumes. |
 | `project_name` | `string` | required | Django project directory name (e.g. `MyApp`). |
