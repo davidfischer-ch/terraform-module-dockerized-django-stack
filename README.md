@@ -238,7 +238,7 @@ terraform apply
 ## Requirements
 
 * Terraform >= 1.17
-* [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 3.0.2
+* [kreuzwerker/docker](https://github.com/kreuzwerker/terraform-provider-docker) >= 4.7.0
 * [hashicorp/local](https://github.com/hashicorp/terraform-provider-local) >= 2.4.1
 * [hashicorp/random](https://github.com/hashicorp/terraform-provider-random) >= 3.6.0
 
