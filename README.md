@@ -154,7 +154,7 @@ data_directory/
 │   ├── static/     # Collected static files
 │   └── workers/    # Celery beat and worker state databases
 ├── broker/         # Redis data
-├── database/       # PostgreSQL data
+├── database/       # PostgreSQL data, and backup/ for the dumps of its backup action
 └── reverse-proxy/  # Nginx configuration, certificates, dhparam
 ```
 
@@ -262,7 +262,17 @@ sudo docker exec -it myapp-web python manage.py migrate
 
 ### Backup and restore database
 
-See [PostgreSQL Terraform Module (Dockerized)](https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql).
+The database module's actions dump the database into `/data/myapp/database/backup` and restore the
+newest dump:
+
+```bash
+terraform apply -invoke='module.myapp.module.database.action.docker_exec.backup'
+terraform apply -invoke='module.myapp.module.database.action.docker_exec.restore'
+```
+
+Replace `module.myapp` with the stack's address. The others (`analyze`, `check`, `reindex`,
+`update_extensions`) are listed in the README of the
+[PostgreSQL Terraform Module (Dockerized)](https://github.com/davidfischer-ch/terraform-module-dockerized-postgresql).
 
 ### Backup media assets
 
