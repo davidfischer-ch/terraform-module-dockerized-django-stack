@@ -1,6 +1,10 @@
 resource "docker_image" "postgresql" {
   name         = var.postgresql_image_name
   keep_locally = true # Prevent conflicts if other modules are using the image we are destroying
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "random_password" "database" {

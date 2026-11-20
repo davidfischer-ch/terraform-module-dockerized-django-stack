@@ -1,10 +1,14 @@
 resource "docker_image" "nginx" {
   name         = var.nginx_image_name
   keep_locally = true # Prevent conflicts if other modules are using the image we are destroying
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 module "reverse_proxy" {
-  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.6.1"
+  source = "git::https://github.com/davidfischer-ch/terraform-module-dockerized-nginx.git?ref=1.6.2"
 
   identifier = "${var.identifier}-reverse-proxy"
   enabled    = var.enabled

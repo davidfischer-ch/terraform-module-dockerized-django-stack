@@ -1,6 +1,10 @@
 resource "docker_image" "app" {
   name         = var.app_image_name
   keep_locally = true # Prevent conflicts if other modules are using the image we are destroying
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 module "app" {
