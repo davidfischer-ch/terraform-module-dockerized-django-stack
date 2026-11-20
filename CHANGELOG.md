@@ -1,6 +1,25 @@
 # Changelog
 
 
+## Release v1.8.1 (2026-11-20)
+
+Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.8.0...1.8.1
+
+### Fix and enhancements
+
+Reverse Proxy:
+
+* Upgrade `nginx` to 1.6.2, which leaves the cache's temporary files to its workers under a root master
+
+Images:
+
+* Replace each image only once its successor is pulled (`create_before_destroy`): the state keeps the image in use until then
+
+CI:
+
+* Test at both ends of `versions.tf`, every version read from it at run time: the newest Terraform and providers, and their floors
+
+
 ## Release v1.8.0 (2026-11-19)
 
 Diff: https://github.com/davidfischer-ch/terraform-module-dockerized-django-stack/compare/1.7.2...1.8.0
